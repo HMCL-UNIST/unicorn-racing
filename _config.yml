@@ -27,7 +27,7 @@ description: >- # used by seo meta and the atom feed
 url: "https://hmcl-unist.github.io"
 
 github:
-  username: hmcl-unist/unicorn2 # change to your GitHub username
+  username: hmcl-unist/unicorn-racing # change to your GitHub username
 
 twitter:
   username: twitter_username # change to your Twitter username
@@ -116,11 +116,11 @@ comments:
     shortname: # fill with the Disqus shortname. › https://help.disqus.com/en/articles/1717111-what-s-a-shortname
   # utterances settings › https://utteranc.es/
   utterances:
-    repo: hmcl-unist/unicorn2 # <gh-username>/<repo>
+    repo: hmcl-unist/unicorn-racing # <gh-username>/<repo>
     issue_term: pathname # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo: hmcl-unist/unicorn2
+    repo: hmcl-unist/unicorn-racing
     repo_id: R_kgDORBmreQ
     category: Announcements
     category_id: DIC_kwDORBmrec4C1q9R
@@ -151,7 +151,7 @@ pwa:
 paginate: 10
 
 # The base URL of your site
-baseurl: "/unicorn2"
+baseurl: "/unicorn-racing"
 
 # ------------ The following options are not recommended to be modified ------------------
 
