@@ -150,6 +150,10 @@ pwa:
 
 paginate: 10
 
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
 # The base URL of your site
 baseurl: "/unicorn-racing"
 
