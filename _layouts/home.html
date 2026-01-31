@@ -7,6 +7,29 @@ layout: default
 {% assign all_pinned = site.posts | where: 'pin', 'true' %}
 {% assign all_normal = site.posts | where_exp: 'item', 'item.pin != true and item.hidden != true' %}
 
+{% assign ko_posts = site.posts | where: 'lang', 'ko' %}
+{% assign en_posts = site.posts | where: 'lang', 'en' %}
+{% assign unlabeled_posts = site.posts | where_exp: 'p', 'p.lang == nil' %}
+{% assign total_ko_posts = ko_posts.size | plus: unlabeled_posts.size %}
+{% assign total_en_posts = en_posts.size %}
+{% assign per_page = paginator.per_page %}
+{% assign first_page_ko = '' %}
+{% assign first_page_en = '' %}
+{% assign total_pages_ko = total_ko_posts | plus: per_page | minus: 1 | divided_by: per_page %}
+{% assign total_pages_en = total_en_posts | plus: per_page | minus: 1 | divided_by: per_page %}
+
+{% for post in site.posts %}
+  {% assign post_lang = post.lang | default: 'ko' %}
+  {% assign idx = forloop.index0 %}
+  {% assign page_num = idx | divided_by: per_page | plus: 1 %}
+
+  {% if post_lang == 'ko' and first_page_ko == '' %}
+    {% assign first_page_ko = page_num %}
+  {% elsif post_lang == 'en' and first_page_en == '' %}
+    {% assign first_page_en = page_num %}
+  {% endif %}
+{% endfor %}
+
 {% assign posts = '' | split: '' %}
 
 <!-- Get pinned posts on current page -->
@@ -46,9 +69,18 @@ layout: default
   {% endfor %}
 {% endif %}
 
-<div id="post-list" class="flex-grow-1 px-xl-1">
+<div
+  id="post-list"
+  class="flex-grow-1 px-xl-1"
+  data-per-page="{{ paginator.per_page }}"
+  data-lang-total-ko="{{ total_ko_posts }}"
+  data-lang-total-en="{{ total_en_posts }}"
+  data-lang-first-page-ko="{{ first_page_ko | default: 1 }}"
+  data-lang-first-page-en="{{ first_page_en | default: 1 }}"
+  data-current-page="{{ paginator.page }}"
+>
   {% for post in posts %}
-    <article class="card-wrapper card">
+    <article class="card-wrapper card" data-lang="{{ post.lang | default: 'ko' }}" data-lang-ref="{{ post.lang_ref }}">
       <a href="{{ post.url | relative_url }}" class="post-preview row g-0 flex-md-row-reverse">
         {% assign card_body_col = '12' %}
 

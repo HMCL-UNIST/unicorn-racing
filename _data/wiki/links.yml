@@ -1,0 +1,27 @@
+# Wiki Links Configuration (Useful Pages)
+# icon: Font Awesome 아이콘 클래스 (https://fontawesome.com/icons)
+# type: "external" (외부 링크) 또는 "page" (내부 위키 페이지)
+
+# - title: "VESC Tools"
+#   url: "/posts/vesc-tools-download/"
+#   description: "VESC configuration guide"
+#   icon: "fas fa-tools"
+#   type: "page"
+
+- title: "UNICORN Racing Stack"
+  url: "https://github.com/hmcl-unist/unicorn-racing-stack"
+  description: "Main code repository"
+  icon: "fab fa-github"
+  type: "external"
+
+- title: "HMCL Homepage"
+  url: "https://hmc.unist.ac.kr"
+  description: "HMCL official website"
+  icon: "fas fa-home"
+  type: "external"
+
+- title: "RoboRacer"
+  url: "https://roboracer.ai/"
+  description: "RoboRacer official website"
+  icon: "fas fa-flag-checkered"
+  type: "external"

@@ -13,6 +13,8 @@ script_includes:
 
 {% include toc-status.html %}
 
+<div id="lang-alt" data-lang="{{ page.lang | default: 'ko' }}" data-lang-ref="{{ page.lang_ref }}"></div>
+
 <article class="px-1" data-toc="{{ enable_toc }}">
   <header>
     <h1 data-toc-skip>{{ page.title }}</h1>

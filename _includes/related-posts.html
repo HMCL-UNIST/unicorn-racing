@@ -12,6 +12,7 @@
 {% assign SEPARATOR = ':' %}
 
 {% assign match_posts = '' | split: '' %}
+{% assign page_lang = page.lang | default: 'ko' %}
 
 {% for category in page.categories %}
   {% assign match_posts = match_posts | push: site.categories[category] | uniq %}
@@ -27,6 +28,11 @@
 
 {% for i in (0..last_index) %}
   {% assign post = match_posts[i] %}
+  {% assign post_lang = post.lang | default: 'ko' %}
+
+  {% if post_lang != page_lang %}
+    {% continue %}
+  {% endif %}
 
   {% if post.url == page.url %}
     {% continue %}

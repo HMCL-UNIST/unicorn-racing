@@ -1,17 +1,24 @@
-## Template › https://github.com/jekyll/jekyll-seo-tag/blob/master/docs/advanced-usage.md#setting-author-url
-# -------------------------------------
-# {author_id}:
-#   name: {full name}
-#   twitter: {twitter_of_author}
-#   url: {homepage_of_author}
-# -------------------------------------
+# 저자 정보를 여기에 정의합니다.
+# 포스트의 front matter에서 'author: key' 형식으로 참조할 수 있습니다.
 
-cotes:
-  name: Cotes Chung
-  twitter: cotes2020
-  url: https://github.com/cotes2020/
+jeongsang-ryu:
+  name: Jeongsang Ryu
+  url: https://github.com/jeongsang-ryu  # 선택사항: GitHub, 개인 웹사이트 등
 
-sille_bille:
-  name: Dinesh Prasanth Moluguwan Krishnamoorthy
-  twitter: dinesh_MKD
-  url: https://github.com/SilleBille/
+hangyo-cho:
+  name: Hangyo Cho
+  url: https://github.com/HangyoCho  # 선택사항
+
+yunho-lee:
+  name: Yunho Lee
+  url: https://github.com/dbs2911  # 선택사항
+
+hyeongjoon-yang:
+  name: Hyeongjoon Yang
+  url: https://github.com/Brojoon-10  # 선택사항
+
+
+# 추가 저자 예시:
+# cotes:
+#   name: Cotes Chung
+#   url: https://github.com/cotes2020

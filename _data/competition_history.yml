@@ -1,0 +1,69 @@
+# Competition History
+# members 의 key 는 _data/people.yml 의 key 와 일치해야 합니다.
+# 최신 대회가 위에 오도록 정렬합니다.
+
+- name: "2025 ICCAS Korea Championship"
+  year: 2025
+  result: "1st Place"
+  post: "/posts/2025-iccas-korea-championship-1st-place/"
+  members:
+    - hyeongjoon-yang
+    - inyoung-choi
+    - hangyo-cho
+    # - heedo-kim
+
+- name: "2025 ICRA RoboRacer (24th Autonomous Grand Prix)"
+  year: 2025
+  result: "2nd Place"
+  post: "/posts/2025-icra-roboracer-2nd-place/"
+  members:
+    - jeongsang-ryu
+    - yunho-lee
+    - seongjun-lee
+    - hyeongjoon-yang
+
+- name: "2024 ICCAS Korea Championship"
+  year: 2024
+  result: "3rd Place"
+  post: "/posts/2024-iccas-korea-championship-3rd-place/"
+  members:
+    - seongjun-lee
+    - hyeongjoon-yang
+
+- name: "2023 ICCAS Korea Championship"
+  year: 2023
+  result: "1st Place"
+  post: "/posts/2023-iccas-korea-championship-1st-place/"
+  members:
+    - kwangrok-kim
+    - kyungtae-kang
+    - jeongsang-ryu
+    - yunho-lee
+
+- name: "2023 11th F1TENTH Autonomous Grand Prix (ICRA)"
+  year: 2023
+  result: "6th Place"
+  post: "/posts/2023-11th-f1tenth-autonomous-grand-prix-6th-place/"
+  members:
+    - hojin-lee
+    - youngim-nam
+    - kwangrok-kim
+    - sanghun-lee
+
+- name: "2022 1st F1TENTH Korea Championship"
+  year: 2022
+  result: "4th Place"
+  post: "/posts/the-1st-f1tenth-korea-championship-4th-place/"
+  members:
+    - junsung-kwon
+    - minu-shin
+    - ilseung-yoon
+
+- name: "2022 10th F1TENTH Autonomous Grand Prix (ICRA)"
+  year: 2022
+  result: "5th Place"
+  post: "/posts/2022-10th-f1tenth-autonomous-grand-prix-5th-place/"
+  members:
+    - junsung-kwon
+    - youngim-nam
+    - ilseung-yoon

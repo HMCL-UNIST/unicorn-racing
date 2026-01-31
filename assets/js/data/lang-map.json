@@ -1,0 +1,17 @@
+---
+layout: null
+---
+{
+{%- assign lang_posts = site.posts | where_exp: "p", "p.lang_ref" -%}
+{%- assign refs = lang_posts | map: "lang_ref" | uniq -%}
+{%- for ref in refs -%}
+  {%- assign matched = lang_posts | where: "lang_ref", ref -%}
+  "{{ ref }}": {
+  {%- for post in matched -%}
+    "{{ post.lang | default: 'ko' }}": "{{ post.url | relative_url }}"
+    {%- unless forloop.last -%},{%- endunless -%}
+  {%- endfor -%}
+  }
+  {%- unless forloop.last -%},{%- endunless -%}
+{%- endfor -%}
+}

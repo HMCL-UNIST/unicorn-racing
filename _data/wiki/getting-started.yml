@@ -1,0 +1,96 @@
+# Getting Started Steps Configuration
+# section: 섹션 ID (앵커 링크에 사용)
+
+- section: "build-a-car"
+  title: "Build a Car"
+  icon: "fas fa-car"
+  description: "How to build a car"
+  steps:
+    - step: 1
+      title: "Check the parts list"
+      url: ""
+      description: "Parts list required for assembly (coming soon)"
+
+    - step: 2
+      title: "Chassis assembly"
+      url: ""
+      description: "Basic chassis, motor, servo assembly guide (coming soon)"
+
+    - step: 3
+      title: "Wiring & electronics"
+      url: ""
+      description: "Battery, ESC, and computer wiring guide (coming soon)"
+
+- section: "build-racing-stack"
+  title: "Build Racing Stack"
+  icon: "fas fa-code"
+  description: "Set up the software stack"
+  steps:
+    - step: 1.2
+      title: "GitHub Repository"
+      url: "https://github.com/hmcl-unist/unicorn-racing"
+      description: "Clone the source and review project structure"
+      external: true
+
+    - step: 2
+      title: "ROS environment setup"
+      url: ""
+      description: "Build ROS workspace and install packages (coming soon)"
+
+    - step: 3
+      title: "VESC ROS package integration"
+      url: ""
+      description: "Run the VESC driver node and check topics (coming soon)"
+
+- section: "configure-a-car"
+  title: "Configure a Car"
+  icon: "fas fa-wrench"
+  description: "VESC setup and sensor calibration"
+  steps:
+    - step: 1
+      title: "Download VESC Tool"
+      url: "/posts/vesc-tools-download/"
+      lang_ref: "vesc-tools-download"
+      description: "Install VESC Tool and connect to VESC"
+
+    - step: 2
+      title: "Firmware Upgrade"
+      url: "/posts/vesc-firmware-upgrade/"
+      lang_ref: "vesc-firmware-upgrade"
+      description: "Stable firmware (6.05) upgrade guide"
+
+    - step: 3
+      title: "Motor direction & current settings"
+      url: "/posts/vesc-general-tab/"
+      lang_ref: "vesc-general-tab"
+      description: "Basic settings in Motor Settings → General"
+
+    - step: 4
+      title: "FOC setup"
+      url: "/posts/vesc-foc-tab/"
+      lang_ref: "vesc-foc-tab"
+      description: "Measure FOC motor parameters and set sensor mode"
+
+    - step: 5
+      title: "Hall sensor setup"
+      url: "/posts/vesc-hall-sensor/"
+      lang_ref: "vesc-hall-sensor"
+      description: "Measure Hall sensors for sensored FOC"
+
+    - step: 6
+      title: "PID Speed Controller tuning"
+      url: "/posts/vesc-pid-controllers/"
+      lang_ref: "vesc-pid-controllers"
+      description: "Tune PID gains to improve RPM response"
+
+    - step: 7
+      title: "Servo output setup"
+      url: "/posts/vesc-servo-output/"
+      lang_ref: "vesc-servo-output"
+      description: "Enable and test servo output"
+
+    - step: 8
+      title: "IMU setup"
+      url: "/posts/vesc-imu/"
+      lang_ref: "vesc-imu"
+      description: "Enable built-in IMU and connect with ROS"

@@ -16,6 +16,9 @@
 
 #topbar {
   @extend %btn-color;
+  .topbar-actions {
+    gap: 0.35rem;
+  }
 
   #breadcrumb {
     font-size: 1rem;

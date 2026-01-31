@@ -2,35 +2,55 @@
 
 {% assign MAX_SIZE = 5 %}
 
-{% assign all_list = '' | split: '' %}
+{% assign all_list_ko = '' | split: '' %}
+{% assign all_list_en = '' | split: '' %}
 
 {% for post in site.posts %}
   {% assign datetime = post.last_modified_at | default: post.date %}
+  {% assign post_lang = post.lang | default: 'ko' %}
 
   {% capture elem %}
     {{- datetime | date: "%Y%m%d%H%M%S" -}}::{{- forloop.index0 -}}
   {% endcapture %}
 
-  {% assign all_list = all_list | push: elem %}
+  {% if post_lang == 'en' %}
+    {% assign all_list_en = all_list_en | push: elem %}
+  {% else %}
+    {% assign all_list_ko = all_list_ko | push: elem %}
+  {% endif %}
 {% endfor %}
 
-{% assign all_list = all_list | sort | reverse %}
+{% assign all_list_ko = all_list_ko | sort | reverse %}
+{% assign all_list_en = all_list_en | sort | reverse %}
 
-{% assign update_list = '' | split: '' %}
+{% assign update_list_ko = '' | split: '' %}
+{% assign update_list_en = '' | split: '' %}
 
-{% for entry in all_list limit: MAX_SIZE %}
-  {% assign update_list = update_list | push: entry %}
+{% for entry in all_list_ko limit: MAX_SIZE %}
+  {% assign update_list_ko = update_list_ko | push: entry %}
 {% endfor %}
 
-{% if update_list.size > 0 %}
+{% for entry in all_list_en limit: MAX_SIZE %}
+  {% assign update_list_en = update_list_en | push: entry %}
+{% endfor %}
+
+{% if update_list_ko.size > 0 or update_list_en.size > 0 %}
   <section id="access-lastmod">
     <h2 class="panel-heading">{{- site.data.locales[include.lang].panel.lastmod -}}</h2>
     <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
-      {% for item in update_list %}
+      {% for item in update_list_ko %}
         {% assign index = item | split: '::' | last | plus: 0 %}
         {% assign post = site.posts[index] %}
         {% assign url = post.url | relative_url %}
-        <li class="text-truncate lh-lg">
+        <li class="text-truncate lh-lg" data-lang="ko" data-lang-ref="{{ post.lang_ref }}">
+          <a href="{{ url }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+      {% for item in update_list_en %}
+        {% assign index = item | split: '::' | last | plus: 0 %}
+        {% assign post = site.posts[index] %}
+        {% assign url = post.url | relative_url %}
+        <li class="text-truncate lh-lg" data-lang="en" data-lang-ref="{{ post.lang_ref }}">
           <a href="{{ url }}">{{ post.title }}</a>
         </li>
       {% endfor %}

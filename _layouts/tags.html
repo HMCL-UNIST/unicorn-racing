@@ -12,10 +12,19 @@ layout: page
   {% assign sorted_tags = tags | sort_natural %}
 
   {% for t in sorted_tags %}
+    {% assign tag_posts = site.tags[t] %}
+    {% assign tag_en = tag_posts | where: 'lang', 'en' %}
+    {% assign tag_ko = tag_posts | where: 'lang', 'ko' %}
+    {% assign tag_unlabeled = tag_posts | where_exp: 'p', 'p.lang == nil' %}
+    {% assign tag_ko_count = tag_ko.size | plus: tag_unlabeled.size %}
+    {% assign tag_en_count = tag_en.size %}
     <div>
       <a class="tag" href="{{ t | slugify | url_encode | prepend: '/tags/' | append: '/' | relative_url }}">
         {{ t -}}
-        <span class="text-muted">{{ site.tags[t].size }}</span>
+        <span class="text-muted">
+          <span data-lang="ko">{{ tag_ko_count }}</span>
+          <span data-lang="en">{{ tag_en_count }}</span>
+        </span>
       </a>
     </div>
   {% endfor %}

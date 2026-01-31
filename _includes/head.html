@@ -8,6 +8,22 @@
     name="viewport"
     content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
   >
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('lang');
+        var fallback = document.documentElement.getAttribute('lang') || 'ko';
+        var lang = stored || fallback;
+        document.documentElement.setAttribute('data-lang-pref', lang);
+      } catch (e) {}
+    })();
+  </script>
+  <style>
+    html[data-lang-pref="ko"] [data-lang="en"],
+    html[data-lang-pref="en"] [data-lang="ko"] {
+      display: none !important;
+    }
+  </style>
 
   {%- capture seo_tags -%}
     {% seo title=false %}
@@ -89,6 +105,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ '/assets/css/:THEME.css' | replace: ':THEME', site.theme | relative_url }}">
 
+
   <!-- Web Font -->
   <link rel="stylesheet" href="{{ site.data.origin[type].webfonts | relative_url }}">
 
@@ -134,6 +151,8 @@
       {% endif %}
     {% endfor %}
   {% endif %}
+
+  <meta name="baseurl" content="{{ site.baseurl | default: '' }}">
 
   {% include metadata-hook.html %}
 </head>

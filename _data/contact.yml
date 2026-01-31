@@ -3,16 +3,17 @@
 - type: github
   icon: "fab fa-github"
 
-- type: twitter
-  icon: "fa-brands fa-x-twitter"
+- type: homepage
+  icon: 'fas fa-home'
+  url: 'https://hmc.unist.ac.kr'
 
 - type: email
   icon: "fas fa-envelope"
   noblank: true # open link in current tab
 
-- type: rss
-  icon: "fas fa-rss"
-  noblank: true
+# - type: rss
+#   icon: "fas fa-rss"
+#   noblank: true
 # Uncomment and complete the url below to enable more contact options
 #
 # - type: mastodon
@@ -21,7 +22,18 @@
 #
 # - type: linkedin
 #   icon: 'fab fa-linkedin'   # icons powered by <https://fontawesome.com/>
-#   url:  ''                  # Fill with your Linkedin homepage
+#   url:  'https://www.linkedin.com/in/jeongsang-ryu-b0b629310/'                  # Fill with your Linkedin homepage
+
+- type: youtube
+  icon: 'fab fa-youtube'
+  url: 'https://www.youtube.com/@UnicornRacing-hmcl'
+
+
+
+
+# - type: twitter
+#   icon: "fa-brands fa-x-twitter"
+
 #
 # - type: stack-overflow
 #   icon: 'fab fa-stack-overflow'

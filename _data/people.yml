@@ -1,0 +1,182 @@
+# Team member information
+# Each member should have: name, role, email, image, and optional links
+
+# Advisor
+cheolhyeon-kwon:
+  name: Cheolhyeon Kwon, Ph.D.
+  role: Advisor
+  title: Associate Professor
+  department: Department of Mechanical Engineering, UNIST
+  email: kwonc@unist.ac.kr
+  phone: +82(0)52-217-2433
+  image: /assets/img/advisor_kwon.png
+  homepage: https://hmc.unist.ac.kr
+  type: advisor
+
+# Team Members
+jeongsang-ryu:
+  name: Jeongsang Ryu
+  korean_name: 류정상
+  role: Combined Master/Ph.D Student
+  course: Combined
+  email: ryujs@unist.ac.kr
+  research_areas:
+    - LIO
+    - SLAM
+  interests:
+    - RL
+    - Racing
+    - Sensor Fusion
+  image: /assets/img/team/jeongsang-ryu.png
+  type: member
+
+yunho-lee:
+  name: Yunho Lee
+  korean_name: 이윤호
+  role: Combined Master/Ph.D Student
+  course: Combined
+  email: dbs2911@unist.ac.kr
+  research_areas:
+    - Offroad
+  interests:
+    - Sensor Fusion
+    - Uncertainty-aware
+  image: /assets/img/team/yunho-lee.png
+  type: member
+
+hyeongjoon-yang:
+  name: Hyeongjoon Yang
+  korean_name: 양형준
+  role: Combined Master/Ph.D Student
+  course: Combined
+  email: shineejoon@unist.ac.kr
+  image: /assets/img/team/hyeongjoon-yang.png
+  type: member
+
+seongjun-lee:
+  name: Seongjun Lee
+  korean_name: 이성준
+  role: Master Student
+  course: Master
+  email: dltjdwns9871@unist.ac.kr
+  research_areas:
+    - Decison Making
+  interests:
+    - RL
+  image: /assets/img/team/seongjun-lee.png
+  type: member
+
+inyoung-choi:
+  name: Inyoung Choi
+  korean_name: 최인영
+  role: Master Student
+  course: Master
+  email: dls6dud@unist.ac.kr
+  research_areas:
+    - Decison Making
+    - Intent inference
+  image: /assets/img/team/inyoung-choi.png
+  type: member
+
+hangyo-cho:
+  name: Hangyo Cho
+  korean_name: 조한교
+  role: Master Student
+  course: Master
+  email: hgcho@unist.ac.kr
+  research_areas:
+    - LIO
+    - LVIO
+    - SLAM
+  interests:
+    - Racing
+    - Sensor Fusion
+  image: /assets/img/team/hangyo-cho.png
+  type: member
+
+# heedo-kim:
+#   name: Heedo Kim
+#   korean_name: 김희도
+#   role: Graduate Student
+#   type: member
+
+youngim-nam:
+  name: Youngim Nam
+  korean_name: 남영임
+  role: Combined Master/Ph.D Student
+  course: Combined
+  email: nyi0944@unist.ac.kr
+  image: /assets/img/team/youngim-nam.png
+  type: member
+
+gaeun-lee:
+  name: Gaeun Lee
+  korean_name: 이가은
+  role: Master Student
+  course: Master
+  email: nueag2@unist.ac.kr
+  image: /assets/img/team/gaeun-lee.png
+  type: member
+
+hojin-lee:
+  name: Hojin Lee
+  korean_name: 이호진
+  role: Postdoc
+  course: Postdoc
+  email: hojinlee@unist.ac.kr
+  image: /assets/img/team/hojin-lee.png
+  type: member
+
+sanghun-lee:
+  name: Sanghun Lee
+  korean_name: 이상훈
+  role: Ph.D Student
+  course: Ph.D
+  email: sanghun17@unist.ac.kr
+  image: /assets/img/team/sanghun-lee.png
+  type: member
+
+# Alumni
+kyungtae-kang:
+  name: Kyungtae Kang
+  korean_name: 강경태
+  role: Alumni
+  course: Alumni
+  email: kennedy98@unist.ac.kr
+  image: /assets/img/team/kyungtae-kang.png
+  type: alumni
+
+kwangrok-kim:
+  name: Kwangrok Kim
+  korean_name: 김광록
+  role: Alumni
+  course: Alumni
+  research_areas:
+    - LIO
+    - SLAM
+  image: /assets/img/team/kwangrok-kim.png
+  type: alumni
+
+junsung-kwon:
+  name: Junsung Kwon
+  korean_name: 권준성
+  role: Alumni
+  course: Alumni
+  image: /assets/img/team/junsung-kwon.png
+  type: alumni
+
+ilseung-yoon:
+  name: Ilseung Yoon
+  korean_name: 윤일승
+  role: Alumni
+  course: Alumni
+  image: /assets/img/team/ilseung-yoon.png
+  type: alumni
+
+minu-shin:
+  name: Minu Shin
+  korean_name: 신민우
+  role: Alumni
+  course: Alumni
+  image: /assets/img/team/minu-shin.png
+  type: alumni

@@ -22,6 +22,7 @@
   .card {
     border: 0;
     background: none;
+    box-shadow: 0 0 0 1px var(--card-border-color, var(--main-border-color)), var(--card-shadow);
 
     %img-radius {
       border-radius: v.$radius-lg v.$radius-lg 0 0;

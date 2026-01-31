@@ -5,16 +5,29 @@ layout: page
 
 {% include lang.html %}
 
+{% assign ko_posts = page.posts | where: 'lang', 'ko' %}
+{% assign en_posts = page.posts | where: 'lang', 'en' %}
+{% assign unlabeled_posts = page.posts | where_exp: 'p', 'p.lang == nil' %}
+{% assign ko_count = ko_posts.size | plus: unlabeled_posts.size %}
+{% assign en_count = en_posts.size %}
+
 <div id="page-category">
   <h1 class="ps-lg-2">
     <i class="far fa-folder-open fa-fw text-muted"></i>
     {{ page.title }}
-    <span class="lead text-muted ps-2">{{ page.posts | size }}</span>
+    <span class="lead text-muted ps-2" data-lang-count>
+      <span data-lang="ko">{{ ko_count }}</span>
+      <span data-lang="en">{{ en_count }}</span>
+    </span>
   </h1>
 
   <ul class="content ps-0">
     {% for post in page.posts %}
-      <li class="d-flex justify-content-between px-md-3">
+      <li
+        class="d-flex justify-content-between px-md-3"
+        data-lang="{{ post.lang | default: 'ko' }}"
+        data-lang-ref="{{ post.lang_ref }}"
+      >
         <a href="{{ post.url | relative_url }}">{{ post.title }}</a>
         <span class="dash flex-grow-1"></span>
         {% include datetime.html date=post.date class='text-muted small text-nowrap' lang=lang %}
