@@ -196,7 +196,7 @@ Not all motors are suitable.
 
 ### Related posts
 - [Firmware Upgrade]({{ site.baseurl }}/posts/vesc-firmware-upgrade-guide)
-- [VESC Tool Download & Installation]({{ site.baseurl }}/posts/vesc-tools-download)
+- [VESC Tool Download & Installation]({{ site.baseurl }}/posts/vesc-tool-download)
 
 ### Recommended video
 

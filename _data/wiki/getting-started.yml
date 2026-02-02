@@ -49,8 +49,8 @@
   steps:
     - step: 1
       title: "Download VESC Tool"
-      url: "/posts/vesc-tools-download/"
-      lang_ref: "vesc-tools-download"
+      url: "/posts/vesc-tool-download/"
+      lang_ref: "vesc-tool-download"
       description: "Install VESC Tool and connect to VESC"
 
     - step: 2

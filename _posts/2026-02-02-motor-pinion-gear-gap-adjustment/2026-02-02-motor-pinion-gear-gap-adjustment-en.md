@@ -1,5 +1,5 @@
 ---
-title: How to Adjust the Gap Between Motor Pinion Gear and Drive Shaft Gear
+title: How to Adjust the Gap Between Motor Pinion Gear and Spur Gear
 author: yunho-lee
 date: 2026-02-02 13:00:00 +0900
 categories: [general, debug]
@@ -21,7 +21,7 @@ The following problems can occur when meshing the motor pinion gear with the spu
 - **Too tight**: Excessive friction can prevent smooth rotation.
 - **Too loose**: Gear tooth wear, noise, and torque loss may occur.
 
-Therefore, it is important to mesh the pinion gear and drive shaft with the proper spacing.
+Therefore, it is important to mesh the pinion gear and spur gear with the proper spacing.
 
 > The most accurate method is trial and error — continuously checking for noise, torque delivery, etc. However, since this can be time-consuming and physically demanding, we recommend trying the A4 paper method described below first.
 {: .prompt-info }
@@ -51,4 +51,4 @@ Following this procedure should provide an adequate initial setting. If you noti
 
 ## Conclusion
 
-This post introduced how to adjust the gap between the motor pinion gear and the drive shaft spur gear using A4 paper. A gap where a double-folded A4 paper barely passes through is appropriate for the initial setup. Fine-tune further during actual operation to find the optimal state.
+This post introduced how to adjust the gap between the motor pinion gear and the spur gear using A4 paper. A gap where a double-folded A4 paper barely passes through is appropriate for the initial setup. Fine-tune further during actual operation to find the optimal state.
