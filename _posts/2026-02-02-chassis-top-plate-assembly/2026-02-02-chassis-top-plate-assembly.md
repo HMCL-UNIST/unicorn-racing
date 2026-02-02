@@ -14,8 +14,6 @@ lang_ref: chassis-top-plate-assembly
 
 아래 사진은 아예 비어있는 SRX8 샤시입니다.
 
-![빈 SRX8 샤시](/assets/img/posts/chassis-top-plate-assembly/chassis-empty.jpg)
-
 아래 사진은 추후 부착할 부품들의 전체 사진입니다.
 
 ![부품 전체 사진](/assets/img/posts/chassis-top-plate-assembly/parts-overview.jpg)

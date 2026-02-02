@@ -39,15 +39,35 @@ script_includes:
 
       {% if page.image %}
         {% capture src %}src="{{ page.image.path | default: page.image }}"{% endcapture %}
-        {% capture class %}class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}"{% endcapture %}
         {% capture alt %}alt="{{ page.image.alt | xml_escape | default: "Preview Image" }}"{% endcapture %}
+        {% assign preview_style = '' %}
+
+        {% if page.image.fit %}
+          {% assign preview_style = preview_style | append: '--preview-img-fit: ' | append: page.image.fit | append: ';' %}
+        {% endif %}
+
+        {% if page.image.position %}
+          {% assign preview_style = preview_style
+            | append: '--preview-img-position: '
+            | append: page.image.position
+            | append: ';'
+          %}
+        {% endif %}
+
+        {% if page.image.ratio %}
+          {% assign preview_style = preview_style | append: '--preview-img-ratio: ' | append: page.image.ratio | append: ';' %}
+        {% endif %}
+
+        {% if preview_style != '' %}
+          {% assign preview_style = 'style="' | append: preview_style | append: '"' %}
+        {% endif %}
 
         {% if page.image.lqip %}
           {%- capture lqip -%}lqip="{{ page.image.lqip }}"{%- endcapture -%}
         {% endif %}
 
         <div class="mt-3 mb-3">
-          <img {{ src }} {{ class }} {{ alt }} w="1200" h="630" {{ lqip }}>
+          <img {{ src }} class="preview-img{% if page.image.no_bg %}{{ ' no-bg' }}{% endif %}" {{ alt }} w="1200" h="630" {{ lqip }} {{ preview_style }}>
           {%- if page.image.alt -%}
             <figcaption class="text-center pt-2 pb-2">{{ page.image.alt }}</figcaption>
           {%- endif -%}

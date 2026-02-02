@@ -22,8 +22,6 @@ lang_ref: 2025-iccas-korea-championship-1st-place
 
 ![시상식 1](/assets/img/posts/2025-iccas-korea-championship/image-1.png)
 
-![시상식 2](/assets/img/posts/2025-iccas-korea-championship/67_Banquet_Th.jpg)
-
 ## 마무리
 
 2025년 ICCAS F1TENTH Autonomous Racing Competition에서 우승하며 팀의 지속적인 성장을 증명했습니다.

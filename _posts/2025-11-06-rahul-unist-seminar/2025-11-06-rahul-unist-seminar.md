@@ -20,8 +20,6 @@ lang_ref: rahul-unist-seminar
 
 ![세미나 사진 1](/assets/img/posts/rahul-unist-seminar/image-1.png)
 
-![세미나 사진 2](/assets/img/posts/rahul-unist-seminar/image-2.png)
-
 ![세미나 사진 3](/assets/img/posts/rahul-unist-seminar/image-3.png)
 
 ## 마무리

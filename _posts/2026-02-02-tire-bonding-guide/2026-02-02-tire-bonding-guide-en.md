@@ -10,8 +10,6 @@ lang: en
 lang_ref: tire-bonding-guide
 ---
 
-![New tire bonding example](/assets/img/posts/tire-bonding-guide/overview.png)
-
 ## Check if the tire is pre-bonded
 
 If the product is labeled as **pre-bonded**, you can use it as-is. If there is no label, bonding may be required.

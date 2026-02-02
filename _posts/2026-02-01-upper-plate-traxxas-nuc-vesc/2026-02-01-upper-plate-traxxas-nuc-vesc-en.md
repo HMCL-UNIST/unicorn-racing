@@ -12,8 +12,6 @@ lang_ref: upper-plate-traxxas-nuc-vesc
 
 This upper plate is designed for use with a NUC as the onboard PC, mounted on the Traxxas chassis.
 
-![Upper Plate 3D Model](/assets/img/posts/upper-plate-traxxas-nuc-vesc/image.png)
-
 **CAD File Downloads:**
 - [F1tenth_NUC.SLDPRT]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-nuc-vesc/F1tenth_NUC.sldprt)
 - [F1tenth_NUC.STL]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-nuc-vesc/F1tenth_NUC.stl)

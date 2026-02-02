@@ -1,0 +1,71 @@
+# Wiki Sections Configuration
+# section: 섹션 ID (앵커/구분에 사용)
+
+# title은 url 매칭이 실패하거나 외부 링크일 때만 표시됨(포스트와 매칭되면 포스트 title 사용)
+
+- section: "getting-started"
+  title: "Beginner"
+  icon: "fas fa-rocket"
+  steps:
+    - title: "회로 설계 방식 및 유의점, 개선점"
+
+    - title: "VESC와 배터리, 모터 연결하는 방법"
+      url: "/posts/vesc-battery-motor-connection/"
+
+    - title: "VESC tool 다운로드 하기"
+      url: "/posts/vesc-tool-download/"
+
+    - title: "VESC tool 기본 사용 방법"
+      url: "/posts/vesc-tool-basic-usage/"
+
+    - title: "VESC Firmware Upgrade Guide"
+      url: "/posts/vesc-firmware-upgrade-guide/"
+
+    - title: "모터 연결하고 가장 먼저 해야하는 것 - FOC Tab"
+      url: "/posts/vesc-foc-tab-first/"
+
+    - title: "VESC IMU"
+
+    - title: "General Tab (Motor Settings)"
+
+    - title: "PID Controllers"
+
+    - title: "Enable Servo Output"
+
+    - title: "Hokuyo LiDAR 전원선 납땜"
+
+    - title: "SRX 조립하는 방법"
+
+    - title: "서보 중앙 정렬 후 서보 혼 결합"
+
+    - title: "Upper plate 설계도 공유 및 세부사항"
+      url: "/posts/upper-plate-srx-nuc-vesc/"
+
+    - title: "샤시 및 상판에 부품 체결"
+      url: "/posts/chassis-top-plate-assembly/"
+
+    - title: "선 정리 및 마무리"
+
+    - title: "ERPM gain 찾는 방법"
+
+    - title: "Servo parameter 찾는 방법"
+
+    - title: "base_link 기준 sensor TF 설정하기"
+
+    - title: "차량 configuration 찾는 방법"
+
+- section: "advanced"
+  title: "Advanced"
+  icon: "fas fa-cogs"
+  steps:
+    - title: "Adaptive Wheel Odometry"
+      url: "/posts/adaptive-wheel-odometry/"
+      icon: "fas fa-tachometer-alt"
+
+    - title: "Racing-Stack Remote Run"
+      url: "/posts/racing-stack-remote-run-guide/"
+      icon: "fas fa-network-wired"
+
+    - title: "Chassis & Top Plate Assembly"
+      url: "/posts/chassis-top-plate-assembly/"
+      icon: "fas fa-car-side"

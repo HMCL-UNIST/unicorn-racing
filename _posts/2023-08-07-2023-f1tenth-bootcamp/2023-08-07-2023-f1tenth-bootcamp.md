@@ -14,8 +14,6 @@ lang_ref: 2023-f1tenth-bootcamp
 
 **개최지:** 경상국립대학교
 
-![2023 F1TENTH Bootcamp](/assets/img/posts/2023-f1tenth-bootcamp/image.png)
-
 ## 마무리
 
 2023 F1TENTH Korea Bootcamp을 직접 운영하며, 자율주행 레이싱 기술에 대한 교육과 실습을 진행했습니다.

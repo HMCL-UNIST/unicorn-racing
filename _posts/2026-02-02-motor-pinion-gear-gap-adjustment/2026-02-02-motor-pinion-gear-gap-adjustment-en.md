@@ -12,8 +12,6 @@ lang_ref: motor-pinion-gear-gap-adjustment
 
 When meshing the motor pinion gear with the spur gear, improper spacing can cause various issues. This post introduces a simple method to adjust gear spacing using a sheet of A4 paper.
 
-![Pinion Gear Overview](/assets/img/posts/motor-pinion-gear-gap-adjustment/pinion-gear-overview.png)
-
 ## Why Gear Spacing Matters
 
 The following problems can occur when meshing the motor pinion gear with the spur gear:

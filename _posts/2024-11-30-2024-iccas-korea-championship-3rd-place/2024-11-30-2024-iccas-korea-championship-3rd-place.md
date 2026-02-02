@@ -16,8 +16,6 @@ lang_ref: 2024-iccas-korea-championship-3rd-place
 
 하이라이트 영상: [https://www.youtube.com/watch?v=A8BqrTY5j8w](https://www.youtube.com/watch?v=A8BqrTY5j8w)
 
-![대회 현장](/assets/img/posts/2024-iccas-korea-championship/image.png)
-
 ![단체 사진](/assets/img/posts/2024-iccas-korea-championship/image-1.png)
 
 ## 마무리

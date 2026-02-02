@@ -12,8 +12,6 @@ lang_ref: unicorn-horn
 
 ![Unicorn Horn 3D Model](/assets/img/posts/unicorn-horn/horn-assembly.png)
 
-![Horn Parts Overview](/assets/img/posts/unicorn-horn/horn-parts.png)
-
 The Unicorn horn consists of a total of 5 parts.
 
 ![Blink Disassembly](/assets/img/posts/unicorn-horn/blink-disassembly.png)

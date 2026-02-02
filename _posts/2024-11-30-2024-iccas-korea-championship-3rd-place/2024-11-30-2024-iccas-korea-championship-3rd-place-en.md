@@ -16,8 +16,6 @@ We earned **3rd place** at the F1TENTH Korea Championship in Jeju Island. Not on
 
 Highlight Video: [https://www.youtube.com/watch?v=A8BqrTY5j8w](https://www.youtube.com/watch?v=A8BqrTY5j8w)
 
-![Competition](/assets/img/posts/2024-iccas-korea-championship/image.png)
-
 ![Team Photo](/assets/img/posts/2024-iccas-korea-championship/image-1.png)
 
 ## Closing

@@ -12,8 +12,6 @@ lang_ref: upper-plate-srx-nuc-no-vesc
 
 SRX Chassis 위에 올리기 위한 Upper plate이며, 기본적인 plate에 여러 개선 사항이 반영된 버전입니다.
 
-![Upper Plate 3D 모델](/assets/img/posts/upper-plate-srx-nuc-no-vesc/image.png)
-
 **CAD 파일 다운로드:**
 - [SRX8_NUC_deck_no_vesc_final.SLDPRT]({{ site.baseurl }}/assets/img/posts/upper-plate-srx-nuc-no-vesc/SRX8_NUC_deck_no_vesc_final.sldprt)
 - [SRX8_NUC_deck_no_vesc_final.STL]({{ site.baseurl }}/assets/img/posts/upper-plate-srx-nuc-no-vesc/SRX8_NUC_deck_no_vesc_final.stl)

@@ -10,8 +10,6 @@ lang: ko
 lang_ref: unicorn-horn
 ---
 
-![Unicorn Horn 3D 모델](/assets/img/posts/unicorn-horn/horn-assembly.png)
-
 ![Horn 파트 구성](/assets/img/posts/unicorn-horn/horn-parts.png)
 
 Unicorn horn은 총 5개의 파트로 이루어져 있습니다.

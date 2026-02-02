@@ -40,8 +40,6 @@ Configure RViz as follows for accurate assessment.
 
 ### Recommended Settings
 
-![RViz Intensity Settings](/assets/img/posts/lidar-intensity-vehicle-leveling/rviz-intensity-settings.png)
-
 - **Color Transformer:** `Intensity`
 - **Autocompute Intensity Bounds:** **OFF**
   - If auto-range is enabled, the color reference changes in real-time based on the surrounding environment, making it difficult to visually quantify leveling deviations. Use a fixed range to observe color changes.

@@ -86,6 +86,27 @@ layout: default
 
         {% if post.image %}
           {% assign src = post.image.path | default: post.image %}
+          {% assign preview_style = '' %}
+
+          {% if post.image.fit %}
+            {% assign preview_style = preview_style | append: '--preview-img-fit: ' | append: post.image.fit | append: ';' %}
+          {% endif %}
+
+          {% if post.image.position %}
+            {% assign preview_style = preview_style
+              | append: '--preview-img-position: '
+              | append: post.image.position
+              | append: ';'
+            %}
+          {% endif %}
+
+          {% if post.image.ratio %}
+            {% assign preview_style = preview_style | append: '--preview-img-ratio: ' | append: post.image.ratio | append: ';' %}
+          {% endif %}
+
+          {% if preview_style != '' %}
+            {% assign preview_style = 'style="' | append: preview_style | append: '"' %}
+          {% endif %}
 
           {% if post.media_subpath %}
             {% unless src contains '://' %}
@@ -118,7 +139,9 @@ layout: default
           {% assign alt = post.image.alt | xml_escape | default: 'Preview Image' %}
 
           <div class="col-md-5">
-            <img src="{{ src }}" alt="{{ alt }}" {{ lqip_attr }}>
+            <div class="preview-img{% if post.image.no_bg %}{{ ' no-bg' }}{% endif %}" {{ preview_style }}>
+              <img src="{{ src }}" alt="{{ alt }}" {{ lqip_attr }}>
+            </div>
           </div>
 
           {% assign card_body_col = '7' %}

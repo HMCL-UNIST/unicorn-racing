@@ -20,8 +20,6 @@ lang_ref: 2023-iccas-korea-championship-1st-place
 
 ![축하](/assets/img/posts/2023-iccas-korea-championship/image-1.png)
 
-![시상식](/assets/img/posts/2023-iccas-korea-championship/image-2.png)
-
 ![단체 사진](/assets/img/posts/2023-iccas-korea-championship/ICCAS2_0761.jpg)
 
 ## 마무리

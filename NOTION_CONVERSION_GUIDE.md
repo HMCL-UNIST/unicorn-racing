@@ -173,6 +173,7 @@ image:
   path: /assets/img/posts/vesc-general-tab/general-tab.png
 ```
 
+> ✅ 대표 이미지로 지정한 파일은 **본문에서 중복으로 사용하지 않는다**.
 > ⚠️ `image.path`에는 `{{ site.baseurl }}`을 **붙이지 않는다**. Jekyll이 자동으로 처리한다.
 
 ### Common Categories

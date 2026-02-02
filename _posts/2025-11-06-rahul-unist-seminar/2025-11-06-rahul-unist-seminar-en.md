@@ -20,8 +20,6 @@ His seminar was on Multi-Agent Dynamic Games, providing valuable insights on the
 
 ![Seminar Photo 1](/assets/img/posts/rahul-unist-seminar/image-1.png)
 
-![Seminar Photo 2](/assets/img/posts/rahul-unist-seminar/image-2.png)
-
 ![Seminar Photo 3](/assets/img/posts/rahul-unist-seminar/image-3.png)
 
 ## Closing

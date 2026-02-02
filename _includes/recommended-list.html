@@ -1,0 +1,63 @@
+<!-- Get recommended posts -->
+
+{% assign MAX_SIZE = 5 %}
+
+{% assign all_list_ko = '' | split: '' %}
+{% assign all_list_en = '' | split: '' %}
+
+{% for post in site.posts %}
+  {% if post.recommended %}
+    {% assign datetime = post.last_modified_at | default: post.date %}
+    {% assign post_lang = post.lang | default: 'ko' %}
+
+    {% capture elem %}
+      {{- datetime | date: "%Y%m%d%H%M%S" -}}::{{- forloop.index0 -}}
+    {% endcapture %}
+
+    {% if post_lang == 'en' %}
+      {% assign all_list_en = all_list_en | push: elem %}
+    {% else %}
+      {% assign all_list_ko = all_list_ko | push: elem %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% assign all_list_ko = all_list_ko | sort | reverse %}
+{% assign all_list_en = all_list_en | sort | reverse %}
+
+{% assign recommended_list_ko = '' | split: '' %}
+{% assign recommended_list_en = '' | split: '' %}
+
+{% for entry in all_list_ko limit: MAX_SIZE %}
+  {% assign recommended_list_ko = recommended_list_ko | push: entry %}
+{% endfor %}
+
+{% for entry in all_list_en limit: MAX_SIZE %}
+  {% assign recommended_list_en = recommended_list_en | push: entry %}
+{% endfor %}
+
+{% if recommended_list_ko.size > 0 or recommended_list_en.size > 0 %}
+  {% assign recommended_label = site.data.locales[include.lang].panel.recommended | default: 'Recommended' %}
+  <section id="access-recommended">
+    <h2 class="panel-heading">{{- recommended_label -}}</h2>
+    <ul class="content list-unstyled ps-0 pb-1 ms-1 mt-2">
+      {% for item in recommended_list_ko %}
+        {% assign index = item | split: '::' | last | plus: 0 %}
+        {% assign post = site.posts[index] %}
+        {% assign url = post.url | relative_url %}
+        <li class="text-truncate lh-lg" data-lang="ko" data-lang-ref="{{ post.lang_ref }}">
+          <a href="{{ url }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+      {% for item in recommended_list_en %}
+        {% assign index = item | split: '::' | last | plus: 0 %}
+        {% assign post = site.posts[index] %}
+        {% assign url = post.url | relative_url %}
+        <li class="text-truncate lh-lg" data-lang="en" data-lang-ref="{{ post.lang_ref }}">
+          <a href="{{ url }}">{{ post.title }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+  <!-- #access-recommended -->
+{% endif %}

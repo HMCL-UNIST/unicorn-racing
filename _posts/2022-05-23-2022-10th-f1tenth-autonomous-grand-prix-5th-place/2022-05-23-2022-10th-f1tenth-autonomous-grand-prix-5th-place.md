@@ -21,8 +21,6 @@ lang_ref: 2022-10th-f1tenth-autonomous-grand-prix-5th-place
 
 대회 상세 정보: [https://icra2022-race.f1tenth.org/index.html](https://icra2022-race.f1tenth.org/index.html)
 
-![대회 현장](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image.png)
-
 ![팀 사진](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image-1.png)
 
 ![발표](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image-2.png)

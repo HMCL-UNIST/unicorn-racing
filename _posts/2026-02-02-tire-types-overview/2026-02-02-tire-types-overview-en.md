@@ -10,8 +10,6 @@ lang: en
 lang_ref: tire-types-overview
 ---
 
-![Tire types overview](/assets/img/posts/tire-types-overview/overview.png)
-
 ![Tire compound comparison](/assets/img/posts/tire-types-overview/compound-chart.png)
 
 - Reference link: [https://stradale.co.kr/TIRES](https://stradale.co.kr/TIRES)

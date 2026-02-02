@@ -14,8 +14,6 @@ lang_ref: chassis-top-plate-assembly
 
 The photo below shows an empty SRX8 chassis.
 
-![Empty SRX8 chassis](/assets/img/posts/chassis-top-plate-assembly/chassis-empty.jpg)
-
 The next photo shows the components that will be mounted later.
 
 ![Parts overview](/assets/img/posts/chassis-top-plate-assembly/parts-overview.jpg)

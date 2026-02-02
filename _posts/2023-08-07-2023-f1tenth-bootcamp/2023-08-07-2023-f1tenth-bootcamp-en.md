@@ -14,8 +14,6 @@ We ran the 2023 F1TENTH Korea Bootcamp at Gyeongsang National University.
 
 **Location:** Gyeongsang National University
 
-![2023 F1TENTH Bootcamp](/assets/img/posts/2023-f1tenth-bootcamp/image.png)
-
 ## Closing
 
 We ran the 2023 F1TENTH Korea Bootcamp, providing hands-on training and education in autonomous racing technology.

@@ -6,11 +6,14 @@ categories: [build, advanced]
 tags: [hall sensor, hfi, motor, vesc]
 image:
   path: /assets/img/posts/vesc-hfi-guide-new/overview.png
+  fit: contain            # cover(기본) / contain
+  # position: center top    # center / center top / left center 등
+  # ratio: 16/9             # 40/21(기본), 1/1 등
 lang: ko
 lang_ref: vesc-hfi-guide-new
----
+recommended: true
 
-![VESC HFI 개요](/assets/img/posts/vesc-hfi-guide-new/overview.png)
+---
 
 HFI는 VESC에서 sensorless 모터의 극 위상을 저속에서도 정확히 찾도록 도와주는 기능입니다. 주행 성능 자체에 큰 영향을 주지는 않지만, **sensorless 모터의 저속 정밀도**를 일정 수준 확보할 수 있어 레이싱 출발 시에 이점을 줄 수 있습니다.
 

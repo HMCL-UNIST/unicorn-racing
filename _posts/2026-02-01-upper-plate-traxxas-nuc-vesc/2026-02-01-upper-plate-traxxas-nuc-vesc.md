@@ -12,8 +12,6 @@ lang_ref: upper-plate-traxxas-nuc-vesc
 
 PC로 NUC를 사용할 경우에 해당하며, Traxxas Chassis 위에 올릴 수 있는 기본적인 Upper plate입니다.
 
-![Upper Plate 3D 모델](/assets/img/posts/upper-plate-traxxas-nuc-vesc/image.png)
-
 **CAD 파일 다운로드:**
 - [F1tenth_NUC.SLDPRT]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-nuc-vesc/F1tenth_NUC.sldprt)
 - [F1tenth_NUC.STL]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-nuc-vesc/F1tenth_NUC.stl)

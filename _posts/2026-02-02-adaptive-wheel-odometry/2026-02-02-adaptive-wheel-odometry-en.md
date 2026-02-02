@@ -11,8 +11,6 @@ lang: en
 lang_ref: adaptive-wheel-odometry
 ---
 
-![Adaptive wheel odometry overview](/assets/img/posts/adaptive-wheel-odometry/overview.png)
-
 ## Design goal
 
 The goal is to make the wheel-odometry velocity ($v_{wheel}$) as close as possible to the true vehicle velocity ($v_{car}$). To achieve this, the ERPM gain is modeled as a **dynamic value** rather than a fixed constant.

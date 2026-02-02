@@ -40,8 +40,6 @@ LiDAR 센서는 레이저를 발사한 후 물체에 반사되어 돌아오는 �
 
 ### 권장 설정 (Settings)
 
-![RViz Intensity 설정](/assets/img/posts/lidar-intensity-vehicle-leveling/rviz-intensity-settings.png)
-
 - **Color Transformer:** `Intensity`
 - **Autocompute Intensity Bounds:** **OFF**
   - 자동 범위를 켜두면 주변 환경에 따라 색상 기준이 실시간으로 변하므로, 수평 편차를 시각적으로 정량화하기 어렵습니다. 고정된 범위를 사용해 색상 변화를 관찰해야 합니다.

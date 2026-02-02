@@ -12,8 +12,6 @@ lang_ref: servo-voltage-bec
 
 서보 모터는 인가되는 전압에 따라 토크와 속도 출력이 달라집니다. VESC의 PPM 포트만으로 서보를 구동하면 최대 성능을 발휘하지 못할 수 있으며, BEC를 활용하여 적정 전압을 공급하는 것이 중요합니다.
 
-![B210 서보 모터](/assets/img/posts/servo-voltage-bec/b210-servo.png)
-
 ## 서보 모터의 전압별 스펙
 
 서보 모터들은 각각 작동하는 전압과 그에 따른 속도, 토크가 정해져 있습니다. 사용 중인 **[HIGHEST] B210 Brushless SERVO**를 예로 들어보면, 해당 서보 모터의 스펙은 다음과 같습니다.

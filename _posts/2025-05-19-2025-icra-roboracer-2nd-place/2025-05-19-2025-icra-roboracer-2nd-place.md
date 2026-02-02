@@ -22,8 +22,6 @@ lang_ref: 2025-icra-roboracer-2nd-place
 
 ![포스터](/assets/img/posts/2025-icra-roboracer/UNIST_CHK_Poster_fin.png)
 
-![단체 사진](/assets/img/posts/2025-icra-roboracer/team-photo.jpg)
-
 ![레이싱 차량](/assets/img/posts/2025-icra-roboracer/vehicle-photo.jpg)
 
 ## 마무리

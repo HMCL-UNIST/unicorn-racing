@@ -10,8 +10,6 @@ lang: ko
 lang_ref: tire-bonding-guide
 ---
 
-![새 타이어 본딩 예시](/assets/img/posts/tire-bonding-guide/overview.png)
-
 ## 타이어 본딩 유무 확인
 
 새 타이어를 구매했을 때 아래 이미지처럼 **본딩이 되어 있다고 표기**되어 있으면 그대로 사용해도 됩니다. 반대로 표기가 없다면 본딩이 필요할 수 있습니다.

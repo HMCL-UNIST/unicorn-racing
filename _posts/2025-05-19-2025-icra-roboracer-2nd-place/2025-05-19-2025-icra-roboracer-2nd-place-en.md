@@ -22,8 +22,6 @@ More information: [https://news.unist.ac.kr/professor-cheolhyeon-kwons-team-wins
 
 ![Poster](/assets/img/posts/2025-icra-roboracer/UNIST_CHK_Poster_fin.png)
 
-![Team Photo](/assets/img/posts/2025-icra-roboracer/team-photo.jpg)
-
 ![Race Car](/assets/img/posts/2025-icra-roboracer/vehicle-photo.jpg)
 
 ## Closing

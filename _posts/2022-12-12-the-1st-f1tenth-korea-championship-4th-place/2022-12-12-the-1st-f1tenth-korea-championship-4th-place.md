@@ -16,8 +16,6 @@ lang_ref: the-1st-f1tenth-korea-championship-4th-place
 
 대회 상세 정보: [https://korea-race.f1tenth.org/index.html](https://korea-race.f1tenth.org/index.html)
 
-![대회 현장](/assets/img/posts/the-1st-f1tenth-korea-championship/image.png)
-
 ![팀 사진](/assets/img/posts/the-1st-f1tenth-korea-championship/image-1.png)
 
 ![시상](/assets/img/posts/the-1st-f1tenth-korea-championship/image-2.png)

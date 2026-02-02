@@ -20,8 +20,6 @@ More information: [https://korea-race23.f1tenth.org/](https://korea-race23.f1ten
 
 ![Team Celebration](/assets/img/posts/2023-iccas-korea-championship/image-1.png)
 
-![Award Ceremony](/assets/img/posts/2023-iccas-korea-championship/image-2.png)
-
 ![Team Photo](/assets/img/posts/2023-iccas-korea-championship/ICCAS2_0761.jpg)
 
 ## Closing

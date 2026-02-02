@@ -12,8 +12,6 @@ lang_ref: servo-voltage-bec
 
 Servo motors produce different torque and speed outputs depending on the input voltage. When driving a servo using only the VESC PPM port, it may not achieve maximum performance. Using a BEC to supply the proper voltage is important.
 
-![B210 Servo Motor](/assets/img/posts/servo-voltage-bec/b210-servo.png)
-
 ## Servo Motor Specifications by Voltage
 
 Each servo motor has specific operating voltages with corresponding speed and torque ratings. Taking the **[HIGHEST] B210 Brushless SERVO** as an example, the specifications are as follows:

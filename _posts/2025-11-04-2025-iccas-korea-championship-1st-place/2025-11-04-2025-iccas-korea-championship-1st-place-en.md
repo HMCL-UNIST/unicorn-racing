@@ -22,8 +22,6 @@ More information: [https://me.unist.ac.kr/eng/team-unicorn-advisor-prof-cheolhye
 
 ![Award Ceremony 1](/assets/img/posts/2025-iccas-korea-championship/image-1.png)
 
-![Award Ceremony 2](/assets/img/posts/2025-iccas-korea-championship/67_Banquet_Th.jpg)
-
 ## Closing
 
 We won the 2025 ICCAS F1TENTH Autonomous Racing Competition, demonstrating our team's continued growth and excellence.

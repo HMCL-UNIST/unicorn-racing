@@ -12,8 +12,6 @@ lang_ref: motor-pinion-gear-gap-adjustment
 
 모터 피니언 기어와 스퍼 기어를 맞물릴 때, 간격이 적절하지 않으면 다양한 문제가 발생할 수 있습니다. 이 글에서는 A4 용지를 활용하여 간편하게 기어 간격을 조절하는 방법을 소개합니다.
 
-![피니언 기어 개요](/assets/img/posts/motor-pinion-gear-gap-adjustment/pinion-gear-overview.png)
-
 ## 기어 간격이 중요한 이유
 
 모터 피니언 기어와 스퍼 기어를 맞물릴 때 다음과 같은 문제가 발생할 수 있습니다.

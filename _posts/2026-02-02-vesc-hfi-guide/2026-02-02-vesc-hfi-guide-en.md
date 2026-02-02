@@ -8,9 +8,8 @@ image:
   path: /assets/img/posts/vesc-hfi-guide-new/overview.png
 lang: en
 lang_ref: vesc-hfi-guide-new
+recommended: true
 ---
-
-![VESC HFI overview](/assets/img/posts/vesc-hfi-guide-new/overview.png)
 
 HFI helps VESC estimate rotor position more accurately at low speed for sensorless motors. It doesn’t dramatically change overall performance, but it **improves low‑speed precision** and can provide an advantage at race starts.
 

@@ -11,8 +11,6 @@ lang: ko
 lang_ref: adaptive-wheel-odometry
 ---
 
-![Adaptive wheel odometry overview](/assets/img/posts/adaptive-wheel-odometry/overview.png)
-
 ## 설계 목표
 
 차량의 실제 속도($v_{car}$)와 휠 오도메트리 속도($v_{wheel}$)를 최대한 유사하게 만드는 것이 목표입니다. 이를 위해 ERPM gain을 고정 상수가 아니라 **주행 상황에 따라 동적으로 변하는 값**으로 설계했습니다.

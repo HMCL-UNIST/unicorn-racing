@@ -16,8 +16,6 @@ lang_ref: 2023-11th-f1tenth-autonomous-grand-prix-6th-place
 
 대회 상세 정보: [https://icra2023-race.f1tenth.org/](https://icra2023-race.f1tenth.org/)
 
-![대회 현장](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image.png)
-
 ![팀 사진](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image-1.png)
 
 ![레이싱](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image-2.png)

@@ -16,8 +16,6 @@ We earned the Dynamic Driving Award (4th place) at the F1TENTH Korea Championshi
 
 More information: [https://korea-race.f1tenth.org/index.html](https://korea-race.f1tenth.org/index.html)
 
-![Competition](/assets/img/posts/the-1st-f1tenth-korea-championship/image.png)
-
 ![Team Photo](/assets/img/posts/the-1st-f1tenth-korea-championship/image-1.png)
 
 ![Award](/assets/img/posts/the-1st-f1tenth-korea-championship/image-2.png)

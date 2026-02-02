@@ -12,8 +12,6 @@ lang_ref: lidar-ip-address-wireshark
 
 LiDAR 센서를 PC에 연결하기 위해서는 **센서에 설정된 IP 주소를 확인**해야 합니다. 이 글에서는 Wireshark를 활용하여 센서의 IP 주소 및 IP 대역을 파악하는 방법을 소개합니다.
 
-![LiDAR 센서](/assets/img/posts/lidar-ip-address-wireshark/lidar-overview.png)
-
 ## Wireshark 설치
 
 센서의 IP 주소 및 **센서가 속한 IP 대역을 파악하기 위해 Wireshark를 활용할 수 있습니다.** (예: 192.168.0.10)

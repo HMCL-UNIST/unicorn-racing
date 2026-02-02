@@ -68,3 +68,15 @@
     @extend %no-bottom-border;
   }
 }
+
+#access-recommended {
+  a {
+    color: inherit;
+
+    &:hover {
+      @extend %link-hover;
+    }
+
+    @extend %no-bottom-border;
+  }
+}

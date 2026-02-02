@@ -16,8 +16,6 @@ We participated in the 2023 ICRA conference and the 11th F1TENTH Autonomous Gran
 
 More information: [https://icra2023-race.f1tenth.org/](https://icra2023-race.f1tenth.org/)
 
-![Competition](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image.png)
-
 ![Team Photo](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image-1.png)
 
 ![Racing](/assets/img/posts/2023-11th-f1tenth-autonomous-grand-prix/image-2.png)

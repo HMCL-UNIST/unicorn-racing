@@ -10,8 +10,6 @@ lang: ko
 lang_ref: tire-types-overview
 ---
 
-![타이어 종류 개요](/assets/img/posts/tire-types-overview/overview.png)
-
 ![타이어 컴파운드 비교](/assets/img/posts/tire-types-overview/compound-chart.png)
 
 - 참고 링크: [https://stradale.co.kr/TIRES](https://stradale.co.kr/TIRES)

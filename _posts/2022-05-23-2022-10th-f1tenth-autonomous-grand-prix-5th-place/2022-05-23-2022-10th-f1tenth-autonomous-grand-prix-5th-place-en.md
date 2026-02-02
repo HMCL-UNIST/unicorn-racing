@@ -21,8 +21,6 @@ This was our first international autonomous racing competition. We competed agai
 
 More information: [https://icra2022-race.f1tenth.org/index.html](https://icra2022-race.f1tenth.org/index.html)
 
-![Competition](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image.png)
-
 ![Team](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image-1.png)
 
 ![Presentation](/assets/img/posts/2022-10th-f1tenth-autonomous-grand-prix/image-2.png)

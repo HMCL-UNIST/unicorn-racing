@@ -12,8 +12,6 @@ lang_ref: lidar-ip-address-wireshark
 
 To connect a LiDAR sensor to your PC, you need to **identify the IP address configured on the sensor**. This post introduces how to use Wireshark to determine the sensor's IP address and its IP subnet.
 
-![LiDAR Sensor](/assets/img/posts/lidar-ip-address-wireshark/lidar-overview.png)
-
 ## Installing Wireshark
 
 You can use **Wireshark to identify the sensor's IP address and the subnet it belongs to** (e.g., 192.168.0.10).

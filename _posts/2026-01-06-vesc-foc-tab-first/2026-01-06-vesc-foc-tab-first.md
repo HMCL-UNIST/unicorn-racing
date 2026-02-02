@@ -10,8 +10,6 @@ lang: ko
 lang_ref: vesc-foc-tab-first
 ---
 
-![FOC 탭 개요](/assets/img/posts/vesc-foc-tab-first/overview.png)
-
 VESC로 BLDC 모터를 제어하려면 **FOC 설정이 필수**입니다. FOC 설정이 제대로 되지 않으면 모터가 정상적으로 구동되지 않거나 효율이 떨어지고, 심한 경우 모터나 드라이버에 손상이 발생할 수 있습니다. 이 글에서는 FOC 설정 방법, Sensor Mode 종류, 문제 해결 방법을 정리합니다.
 
 - 참고 영상:

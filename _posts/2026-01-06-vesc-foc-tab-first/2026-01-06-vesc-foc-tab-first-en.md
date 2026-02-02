@@ -10,8 +10,6 @@ lang: en
 lang_ref: vesc-foc-tab-first
 ---
 
-![FOC tab overview](/assets/img/posts/vesc-foc-tab-first/overview.png)
-
 FOC setup is **mandatory** to control a BLDC motor with VESC. If FOC is not configured correctly, the motor may not run, efficiency will drop, and in severe cases the motor or driver can be damaged. This post summarizes the setup process, Sensor Mode types, and troubleshooting tips.
 
 - Reference video:

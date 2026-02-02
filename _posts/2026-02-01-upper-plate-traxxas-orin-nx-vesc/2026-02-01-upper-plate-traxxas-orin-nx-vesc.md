@@ -12,8 +12,6 @@ lang_ref: upper-plate-traxxas-orin-nx-vesc
 
 PC로 Orin NX를 사용할 경우에 해당하며, Traxxas Chassis 위에 올릴 수 있는 기본적인 Upper plate입니다.
 
-![Upper Plate 3D 모델](/assets/img/posts/upper-plate-traxxas-orin-nx-vesc/image.png)
-
 **CAD 파일 다운로드:**
 - [F1tenth_Orin_NX.SLDPRT]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-orin-nx-vesc/F1tenth_Orin_NX.sldprt)
 - [F1tenth_Orin_NX.STL]({{ site.baseurl }}/assets/img/posts/upper-plate-traxxas-orin-nx-vesc/F1tenth_Orin_NX.stl)
