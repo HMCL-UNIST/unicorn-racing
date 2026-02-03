@@ -1,6 +1,6 @@
 ---
 title: "Build Racing-stack with Docker and VS Code"
-author: inyeong-choi
+author: inyoung-choi
 date: 2026-02-02 12:00:00 +0900
 categories: [racing stack, environment]
 tags: [docker, vscode, racing-stack]
@@ -53,13 +53,13 @@ code ~/unicorn_ws/UNICORN
 In VS Code, run **Dev Containers: Rebuild and Reopen in Container**.
 
 You will enter the Docker container automatically and can inspect the Racing-stack from VS Code.
-(You must install the Remote Development extension in the VS Code Extensions tab.)
+(The Remote Development extension must be installed in advance via the VS Code Extensions tab.)
 
 ## Conclusion
 
-- We unify the development environment with Docker to reduce dependency issues.
+- We unify the development environment using Docker to reduce dependency issues.
 - We improve development efficiency using VS Code Dev Containers.
-- We manage the Racing-stack in a reproducible way.
+- We manage the Racing-stack in a reproducible and consistent manner.
 
 ## Acknowledgement
 

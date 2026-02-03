@@ -1,6 +1,6 @@
 ---
 title: "Racing-Stack 원격 실행 가이드: 네트워크·SSH·Docker"
-author: inyeong-choi
+author: inyoung-choi
 date: 2026-02-02 20:56:07 +0900
 categories: [racing stack, environment]
 tags: [racing-stack, remote, ssh, docker, ros]

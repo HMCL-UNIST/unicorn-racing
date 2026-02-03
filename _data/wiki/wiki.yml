@@ -13,8 +13,8 @@
     - title: "VESC와 배터리, 모터 연결하는 방법"
       url: "/posts/vesc-battery-motor-connection/"
 
-    - title: "VESC tool 다운로드 하기"
-      url: "/posts/vesc-tool-download/"
+    - title: "VESC tool 다운로드 하기" 
+      url: "/posts/vesc-tool-download/"  
 
     - title: "VESC tool 기본 사용 방법"
       url: "/posts/vesc-tool-basic-usage/"
@@ -56,6 +56,7 @@
       url: "/posts/erpm-gain-calibration/"
 
     - title: "How to find Servo parameter"
+      url: "/posts/servo-parameter/"
 
     - title: "base_link 기준 sensor TF 설정하기"
       url: "/posts/base-link-sensor-tf/"

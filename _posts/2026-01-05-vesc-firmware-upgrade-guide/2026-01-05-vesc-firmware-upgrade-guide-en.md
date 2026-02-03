@@ -49,6 +49,7 @@ Steps:
 6. The VESC will reboot automatically after upload.
 7. Reconnect and continue using it.
 
+![Firmware - Custom File tab for manual upload](/assets/img/posts/vesc-firmware-upgrade-guide/custom-file-upload.webp)
 
 ---
 
@@ -59,6 +60,8 @@ If your PC is online, you can use the built-in **Firmware Archive** feature in V
 
 - It automatically detects your hardware and matches compatible firmware.
 - The default selection is the latest version, so **manually switch it to 6.05**.
+
+![Firmware - Archive tab with version 6.05 selected](/assets/img/posts/vesc-firmware-upgrade-guide/archive-firmware-select.webp)
 
 ## Wrap-up
 
