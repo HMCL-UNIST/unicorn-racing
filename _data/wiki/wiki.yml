@@ -56,6 +56,7 @@
       url: "/posts/erpm-gain-calibration/"
 
     - title: "How to find Servo parameter"
+      url: "/posts/servo-parameter/"
 
     - title: "base_link 기준 sensor TF 설정하기"
       url: "/posts/base-link-sensor-tf/"
