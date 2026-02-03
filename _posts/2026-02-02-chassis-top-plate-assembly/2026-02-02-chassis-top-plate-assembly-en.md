@@ -3,7 +3,7 @@ title: "Chassis and Top Plate Assembly Guide"
 authors: [heedo-kim, yunho-lee]
 date: 2026-02-02 21:30:20 +0900
 categories: [build, beginner]
-tags: [Chassiswiring, wiring]
+tags: [Chassis, wiring]
 image:
   path: /assets/img/posts/chassis-top-plate-assembly/chassis-top-plate-assembly-hero.png
 lang: en

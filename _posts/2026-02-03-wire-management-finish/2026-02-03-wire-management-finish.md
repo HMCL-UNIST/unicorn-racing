@@ -3,7 +3,7 @@ title: 선 정리 및 배선 마무리 가이드
 authors: [heedo-kim, yunho-lee]
 date: 2026-02-03 10:00:00 +0900
 categories: [build, beginner]
-tags: [Chassiswiring, wiring]
+tags: [Chassis, wiring]
 image:
   path: /assets/img/posts/wire-management-finish/wiring-overview.png
 lang: ko

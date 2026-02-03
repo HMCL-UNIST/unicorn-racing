@@ -3,7 +3,7 @@ title: Wire Management and Final Tidy-Up Guide
 authors: [heedo-kim, yunho-lee]
 date: 2026-02-03 10:00:00 +0900
 categories: [build, beginner]
-tags: [Chassiswiring, wiring]
+tags: [Chassis, wiring]
 image:
   path: /assets/img/posts/wire-management-finish/wiring-overview.png
 lang: en
@@ -20,21 +20,24 @@ After assembling the top plate, we reviewed the overall wiring flow. The diagram
 
 ## Using the Space Beside the Servo
 
-The VESC power harness is routed through the open space next to the servo, leading directly to the battery bay. Extra slack is secured with silicone tape to keep it from moving.  
+The VESC power harness is routed through the open space next to the servo so it reaches the battery bay directly. Extra slack is fixed with silicone tape.  
 ![VESC harness path](/assets/img/posts/wire-management-finish/vesc-harness-routing.png)
-*Routing the VESC harness beside the servo*
+*Routing the VESC harness beside the servo*  
+![NUC·servo power routing 1](/assets/img/posts/wire-management-finish/nuc-servo-power-routing-1.jpg)
+*View after the top plate is assembled*
 
 ## Using the Underside of the Top Plate
 
-NUC and servo power cables are attached to the underside of the top plate. The Matek BEC is fixed beside the lower BEC location with silicone tape.  
-![NUC/servo power routing 1](/assets/img/posts/wire-management-finish/nuc-servo-power-routing-1.jpg)
-![NUC/servo power routing 2](/assets/img/posts/wire-management-finish/nuc-servo-power-routing-2.jpg)
-*Power cables tucked under the top plate to avoid interference*
+NUC and servo power cables are taped to the underside of the top plate, and the Matek BEC is fixed in the empty space next to the lower BEC with silicone tape.  
+
+![NUC·servo power routing 2](/assets/img/posts/wire-management-finish/nuc-servo-power-routing-2.jpg)
+*Added BEC and barrel jack connections*  
+![Motor cable management 1](/assets/img/posts/wire-management-finish/motor-cable-management-1.jpg)
+*Using the underside space for tidy routing*
 
 ## Using the Chassis Structure
 
 Motor phase and sensor cables run close to the shaft, so we used the chassis ribs as anchor points and tied them down to prevent contact during driving.  
-![Motor cable fix 1](/assets/img/posts/wire-management-finish/motor-cable-management-1.jpg)
 ![Motor cable fix 2](/assets/img/posts/wire-management-finish/motor-cable-management-2.jpg)
 *Cable ties on chassis ribs keep motor lines clear of the shaft*
 
