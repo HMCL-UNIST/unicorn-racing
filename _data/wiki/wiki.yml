@@ -10,7 +10,7 @@
     - title: "회로 설계 방식 및 유의점, 개선점"
       url: "/posts/circuit-wiring-guide/"
 
-    - title: "VESC와 배터리, 모터 연결하는 방법 hello"
+    - title: "VESC와 배터리, 모터 연결하는 방법"
       url: "/posts/vesc-battery-motor-connection/"
 
     - title: "VESC tool 다운로드 하기" 
