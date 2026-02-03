@@ -97,7 +97,7 @@ gain은 조향각 변화에 따른 서보 값 변화의 비율입니다. rviz에
 Ackermann steering geometry에서 조향각과 회전반경의 관계는 다음과 같습니다. wheelbase는 앞 차축과 뒷 차축 사이의 거리로, 자를 통해 직접 측정하거나, 제조사에 적혀있는 정보를 참고하면 됩니다.
 
 $$
-turning\_radius = \frac{wheelbase}{\tan(steering\_angle)}
+\text{turning_radius} = \frac{\text{wheelbase}}{\tan(\text{steering_angle})}
 $$
 
 명령한 조향각으로 예상 회전반경을 계산하고, 실제 측정된 회전반경과 비교하여 gain을 조정합니다.

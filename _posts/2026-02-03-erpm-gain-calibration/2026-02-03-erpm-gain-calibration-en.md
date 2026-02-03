@@ -18,13 +18,13 @@ When controlling a motor by speed rather than throttle, it is critical to find t
 VESC converts a speed command (m/s) into **ERPM (Electrical RPM)** and sends it to the motor. ERPM is the motor's RPM multiplied by the number of **pole pairs**.
 
 $$
-ERPM = RPM \cdot pole\_pairs
+ERPM = RPM \cdot \text{pole_pairs}
 $$
 
 The speed–ERPM relationship can be expressed with a gain and offset:
 
 $$
-ERPM = speed \cdot speed\_to\_erpm\_gain + speed\_to\_erpm\_offset
+ERPM = speed \cdot \text{speed_to_erpm_gain} + \text{speed_to_erpm_offset}
 $$
 
 VESC ROS packages use this relationship to convert speed commands into ERPM.
@@ -57,13 +57,13 @@ We calculate the theoretical ERPM gain for a Traxxas Fiesta with a Velineon moto
 The final gear ratio is the product of the pinion–spur ratio and the diff–shaft ratio.
 
 $$
-\text{gear\_ratio} = \frac{83}{12} \times \frac{37}{13} \approx 19.69
+\text{gear_ratio} = \frac{83}{12} \times \frac{37}{13} \approx 19.69
 $$
 
 ### ERPM gain calculation
 
 $$
-\text{speed\_to\_erpm\_gain} = \frac{\text{pole\_pairs} \cdot \text{gear\_ratio}}{2\pi \cdot \text{wheel\_radius}}
+\text{speed_to_erpm_gain} = \frac{\text{pole_pairs} \cdot \text{gear_ratio}}{2\pi \cdot \text{wheel_radius}}
 $$
 
 Plugging in the values gives a theoretical speed_to_erpm_gain of **~7520** for the Traxxas Fiesta + Velineon setup. Update the value in `vesc.yaml` accordingly.

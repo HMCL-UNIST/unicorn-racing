@@ -18,13 +18,13 @@ math: true
 VESC는 사용자의 속도 명령(m/s)을 모터가 이해하는 **ERPM(Electrical RPM)**으로 변환해 모터에 전달합니다. ERPM은 모터의 실제 RPM에 **극 쌍수(pole pairs)**를 곱한 값입니다.
 
 $$
-ERPM = RPM \cdot pole\_pairs
+ERPM = RPM \cdot \text{pole_pairs}
 $$
 
 속도와 ERPM의 관계는 다음과 같이 비례상수(gain과 offset)로 나타낼 수 있습니다.
 
 $$
-ERPM = speed \cdot speed\_to\_erpm\_gain + speed\_to\_erpm\_offset
+ERPM = speed \cdot \text{speed_to_erpm_gain} + \text{speed_to_erpm_offset}
 $$
 
 실제 VESC ROS 패키지에서도 위 관계식을 통해 사용자가 입력한 속도 명령을 ERPM으로 변환해 모터에 전달합니다.
@@ -57,13 +57,13 @@ Traxxas Fiesta 차량에 Velineon 모터 조합으로 이론적 ERPM 게인을 �
 최종 기어비는 피니언-스퍼 기어비와 디퍼런셜-샤프트 기어비를 곱해 구합니다.
 
 $$
-\text{gear\_ratio} = \frac{83}{12} \times \frac{37}{13} \approx 19.69
+\text{gear_ratio} = \frac{83}{12} \times \frac{37}{13} \approx 19.69
 $$
 
 ### ERPM 게인 계산
 
 $$
-\text{speed\_to\_erpm\_gain} = \frac{\text{pole\_pairs} \cdot \text{gear\_ratio}}{2\pi \cdot \text{wheel\_radius}}
+\text{speed_to_erpm_gain} = \frac{\text{pole_pairs} \cdot \text{gear_ratio}}{2\pi \cdot \text{wheel_radius}}
 $$
 
 위 값을 대입하면 Traxxas Fiesta + Velineon 조합의 이론적 speed_to_erpm_gain 값은 **약 7520**입니다. `vesc.yaml`에 기록된 speed_to_erpm_gain 값을 변경해 사용하면 됩니다.

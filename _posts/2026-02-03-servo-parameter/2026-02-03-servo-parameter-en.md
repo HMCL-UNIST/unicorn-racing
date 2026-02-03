@@ -97,7 +97,7 @@ Gain is the ratio of servo value change to steering angle change. Measure the tu
 In Ackermann steering geometry, the relationship between steering angle and turning radius is as follows. The wheelbase is the distance between the front and rear axles, which can be measured directly with a ruler or referenced from manufacturer information.
 
 $$
-turning\_radius = \frac{wheelbase}{\tan(steering\_angle)}
+\text{turning_radius} = \frac{\text{wheelbase}}{\tan(\text{steering_angle})}
 $$
 
 Calculate the expected turning radius from the commanded steering angle and adjust the gain by comparing it with the actual measured turning radius.

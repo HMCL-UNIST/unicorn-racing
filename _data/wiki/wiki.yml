@@ -13,7 +13,7 @@
     - title: "VESC와 배터리, 모터 연결하는 방법"
       url: "/posts/vesc-battery-motor-connection/"
 
-    - title: "VESC tool 다운로드 하기"
+    - title: "VESC tool 다운로드 하기"  
       url: "/posts/vesc-tool-download/"
 
     - title: "VESC tool 기본 사용 방법"
