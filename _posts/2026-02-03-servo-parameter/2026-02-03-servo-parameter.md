@@ -10,16 +10,15 @@ lang: ko
 lang_ref: servo-parameter
 math: true
 ---
-
 자율 주행에서 정확한 조향 제어는 경로 추종 성능에 직접적인 영향을 미칩니다. 조향 명령과 실제 바퀴 각도 사이의 변환이 정확하지 않으면, 차량은 의도한 경로를 따라가지 못하고 경로 이탈이나 사고로 이어질 수 있습니다. 본 포스트에서는 Servo Parameter의 개념과 특성, 그리고 실험을 통한 캘리브레이션 방법을 정리합니다.
 
 ## Servo Parameter란?
 
 VESC ROS 패키지에서 조향 명령은 라디안 단위의 조향각으로 입력되며, 이를 서보가 이해하는 0에서 1 사이의 값으로 변환하여 전달합니다. 이 변환 관계는 다음과 같이 gain과 offset으로 나타낼 수 있습니다.
 
-```
-servo_value = steering_angle_to_servo_gain × steering_angle + steering_angle_to_servo_offset
-```
+$$
+\text{servo_value} = \text{steering_angle_to_servo_gain} \times \text{steering_angle} + \text{steering_angle_to_servo_offset}
+$$
 
 - **steering_angle**: 사용자가 입력하는 조향각 (라디안)
 - **servo_value**: 서보에 전달되는 명령 (0 ~ 1)
@@ -34,9 +33,9 @@ ERPM gain의 경우, 기어비, 극 쌍수, 바퀴 반지름 등의 하드웨어
 
 ### Ackermann Steering Geometry란?
 
-차량이 회전할 때, 앞바퀴 두 개는 회전 중심으로부터 서로 다른 거리에 위치합니다. 내측 바퀴는 회전 중심에 가깝고, 외측 바퀴는 멀습니다.
+차량이 회전할 때 두 앞바퀴는 회전 중심으로부터 서로 다른 거리에 위치합니다. 내측 바퀴는 회전 중심에 가깝고, 외측 바퀴는 멉니다.
 
-바퀴는 축에 수직인 방향으로만 순수하게 굴러갈 수 있습니다. 만약 두 앞바퀴가 같은 조향각으로 꺾이면, 두 바퀴 축의 연장선이 서로 평행해지고, 각 바퀴의 회전 반경이 달라지며 옆으로 끌려가는 슬립이 발생합니다.
+바퀴는 축에 수직인 방향으로만 순수하게 굴러갈 수 있습니다. 만약 두 앞바퀴가 같은 조향각으로 꺾이면, 두 바퀴 축의 연장선이 서로 평행해지고, 각 바퀴의 회전 중심이 달라지며 옆으로 끌려가는 슬립이 발생합니다.
 
 이를 방지하기 위해, 두 바퀴 축의 연장선이 동일한 회전 중심에서 만나도록 내측 바퀴는 더 크게, 외측 바퀴는 더 작게 꺾어야 합니다. 이러한 기하학적 조건을 **Ackermann Steering Geometry**라고 합니다.
 
@@ -45,11 +44,11 @@ _Ackermann Steering Geometry_
 
 ### Bellcrank 시스템의 비선형성
 
-RC카에서는 bellcrank 시스템과 타이로드, 너클 암 등의 링키지를 통해 Ackermann Steering Geometry를 근사적으로 구현합니다. 이 복잡한 기구학적 구조로 인해, 서보 각도와 실제 바퀴 조향각 사이의 관계는 **비선형**입니다.
+RC카에서는 bellcrank 시스템과 타이로드, 너클 암 등의 링키지를 통해 Ackermann Steering Geometry를 근사적으로 구현합니다. 이 복잡한 기구학적 구조로 인해, 서보 각도와 실제 바퀴 조향각 사이의 관계는 **비선형적**입니다.
 
 | ![Traxxas Bellcrank](/assets/img/posts/servo-parameter/traxxas-bellcrank.png) | ![Traxxas Ackermann](/assets/img/posts/servo-parameter/traxxas-ackermann.png) |
-|:---:|:---:|
-| Traxxas Fiesta의 조향 시스템 (Bellcrank) | Traxxas Fiesta의 Ackermann Steering Geometry |
+| :-------------------------------------------------------------------------: | :-------------------------------------------------------------------------: |
+|                  Traxxas Fiesta의 조향 시스템 (Bellcrank)                  |                Traxxas Fiesta의 Ackermann Steering Geometry                |
 
 즉, 우리가 설정하는 `steering_angle_to_servo_gain`은 사실 선형 근사이며, 중앙(직진) 부근에서는 잘 맞지만 최대 조향각 부근에서는 오차가 발생할 수 있습니다. 따라서 Servo Parameter는 이론적 계산보다 실험을 통해 자주 사용하는 범위에 맞게 캘리브레이션하는 것이 일반적입니다.
 
@@ -67,7 +66,7 @@ RC카에서는 bellcrank 시스템과 타이로드, 너클 암 등의 링키지�
 
 ### 서보 혼 초기 위치의 중요성
 
-servo gain과 offset이 적용된 상태에서 하드웨어의 한계까지 조향 명령을 주었을 때, 좌측이나 우측 한 방향으로만 제약되지 않도록 주의해야 합니다. 즉, 최대 조향 명령을 주어도 서보 명령은 항상 0에서 1 사이에 존재해야 합니다.
+servo gain과 offset이 적용된 상태에서 하드웨어의 한계까지 조향 명령을 주었을 때, 좌측이나 우측 한 방향으로만 하드웨어의 한계치에 제약되지 않도록 주의해야 합니다. 즉, 최대 조향 명령을 주어도 서보 명령은 항상 0에서 1 사이에 존재해야 합니다.
 
 이를 위해 서보 혼 초기 위치를 가동범위 중앙에 잘 위치시키는 것이 중요합니다. 서보 혼이 잘 장착된 경우, offset은 0.5에 근접하게 측정됩니다.
 
@@ -86,7 +85,7 @@ offset은 조향각 0일 때의 서보 값입니다. 바퀴가 정확히 직진 
 5. 차량이 정확히 직진할 때의 값을 `steering_angle_to_servo_offset`으로 설정합니다.
 
 > 서보 혼이 잘 장착되어 있다면 offset은 0.5 근처가 됩니다. 만약 0.5에서 크게 벗어난다면, 서보 혼을 분리 후 재장착하여 중앙에 맞추는 것을 권장합니다.
-{: .prompt-tip }
+> {: .prompt-tip }
 
 ### Gain 찾기
 
@@ -97,7 +96,7 @@ gain은 조향각 변화에 따른 서보 값 변화의 비율입니다. rviz에
 Ackermann steering geometry에서 조향각과 회전반경의 관계는 다음과 같습니다. wheelbase는 앞 차축과 뒷 차축 사이의 거리로, 자를 통해 직접 측정하거나, 제조사에 적혀있는 정보를 참고하면 됩니다.
 
 $$
-\text{turning_radius} = \frac{\text{wheelbase}}{\tan(\text{steering_angle})}
+\text{turning_radius(R)} = \frac{\text{wheelbase}}{\tan(\text{steering_angle})}
 $$
 
 명령한 조향각으로 예상 회전반경을 계산하고, 실제 측정된 회전반경과 비교하여 gain을 조정합니다.
@@ -114,19 +113,19 @@ _Rviz를 통해 회전 반경을 측정하는 모습_
 
 ### 계산 예시 (Traxxas Fiesta 기준)
 
-| 항목 | 값 |
-|------|-----|
-| 휠베이스 | 0.33m |
-| 명령한 조향각 | 0.2 rad |
-| 예상 회전반경 | 0.33 / tan(0.2) ≈ 1.62m |
-| 실제 측정된 회전반경 | 1.8m |
+| 항목                 | 값                       |
+| -------------------- | ------------------------ |
+| 휠베이스             | 0.33m                    |
+| 명령한 조향각        | 0.2 rad                  |
+| 예상 회전반경        | 0.33 / tan(0.2) ≈ 1.62m |
+| 실제 측정된 회전반경 | 1.8m                     |
 
 이 경우, 예상(1.62m)보다 실제(1.8m)가 크므로 실제 조향각이 명령보다 작다는 의미입니다. 따라서 gain의 절댓값을 늘려야 합니다.
 
 ### 보정 방법
 
-| 상황 | 조치 |
-|------|------|
+| 상황                          | 조치                   |
+| ----------------------------- | ---------------------- |
 | 실제 회전반경 > 예상 회전반경 | gain의 절댓값을 늘린다 |
 | 실제 회전반경 < 예상 회전반경 | gain의 절댓값을 줄인다 |
 

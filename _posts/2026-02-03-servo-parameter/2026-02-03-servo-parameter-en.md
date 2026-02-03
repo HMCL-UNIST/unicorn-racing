@@ -17,9 +17,9 @@ In autonomous driving, precise steering control directly affects path following 
 
 In the VESC ROS package, steering commands are input as steering angles in radians and converted to values between 0 and 1 that the servo understands. This conversion relationship can be represented by gain and offset as follows:
 
-```
-servo_value = steering_angle_to_servo_gain × steering_angle + steering_angle_to_servo_offset
-```
+$$
+\text{servo_value} = \text{steering_angle_to_servo_gain} \times \text{steering_angle} + \text{steering_angle_to_servo_offset}
+$$
 
 - **steering_angle**: Steering angle input by the user (radians)
 - **servo_value**: Command delivered to the servo (0 ~ 1)

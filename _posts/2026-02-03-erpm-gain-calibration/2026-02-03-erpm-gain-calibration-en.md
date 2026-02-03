@@ -63,7 +63,7 @@ $$
 ### ERPM gain calculation
 
 $$
-\text{speed_to_erpm_gain} = \frac{\text{pole_pairs} \cdot \text{gear_ratio}}{2\pi \cdot \text{wheel_radius}}
+\text{speed_to_erpm_gain} = \frac{60 \cdot \text{pole_pairs} \cdot \text{gear_ratio}}{2\pi \cdot \text{wheel_radius}}
 $$
 
 Plugging in the values gives a theoretical speed_to_erpm_gain of **~7520** for the Traxxas Fiesta + Velineon setup. Update the value in `vesc.yaml` accordingly.
@@ -88,11 +88,22 @@ This is the most direct and accurate method.
 3. Measure the time for one full rotation using the high‑speed video.
 4. Compute the actual speed from rotation time and wheel circumference.
 
-**Adjusting gain**
-- If actual speed is higher than commanded, increase the gain.
-- If actual speed is lower, decrease the gain.
+**Calculation example**
 
-### Method 2: Odometry (noisy, not recommended)
+| Item | Value |
+|------|-------|
+| Commanded speed | 1.0 m/s |
+| Time for 1 rotation | 0.25 sec |
+| Wheel circumference | 0.314m (radius 0.05m) |
+| Actual speed | 0.314 / 0.25 = 1.256 m/s |
+
+In this case, the actual speed (1.256 m/s) is higher than the commanded speed (1.0 m/s), so the gain should be decreased.
+
+**Adjusting gain**
+- If actual speed is higher than commanded, decrease the gain.
+- If actual speed is lower, increase the gain.
+
+### Method 2: Odometry (very noisy, not recommended)
 
 This method uses ROS odometry.
 
@@ -109,17 +120,17 @@ This method uses ROS odometry.
 
 **Calibration formula**
 $$
-\text{new\_gain} = \text{old\_gain} \times \frac{\text{actual\_distance}}{\text{odom\_distance}}
+\text{new_gain} = \text{old_gain} \times \frac{\text{odom_distance}}{\text{actual_distance}}
 $$
 
 For example, if old gain is 7520 and odom shows 5.5 m while the actual distance is 5 m:
 
 $$
-\text{new\_gain} = 7520 \times \frac{5.0}{5.5} \approx 6840
+\text{new_gain} = 7520 \times \frac{5.5}{5.0} \approx 8272
 $$
 
 Repeat until odom distance matches the actual distance.
 
 ## Wrap-up
 
-ERPM gain calibration is fundamental for accurate speed control and odometry in autonomous vehicles. If calibration is off, odometry drift can accumulate and cause path deviations or accidents. Take the time to measure carefully and tune the gain precisely.
+ERPM gain calibration is fundamental for accurate speed control and odometry in autonomous vehicles. If calibration is off, odometry drift can accumulate and cause localization failures and other accidents. Take the time to measure carefully and tune the gain precisely.
