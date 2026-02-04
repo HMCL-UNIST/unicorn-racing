@@ -66,14 +66,20 @@
   title: "Advanced"
   icon: "fas fa-cogs"
   steps:
-    - title: "Adaptive Wheel Odometry"
-      url: "/posts/adaptive-wheel-odometry/"
-      icon: "fas fa-tachometer-alt"
+    - title: "VESC HFI 가이드"
+      url: "/posts/vesc-hfi-guide/"
 
-    - title: "Racing-Stack Remote Run"
-      url: "/posts/racing-stack-remote-run-guide/"
-      icon: "fas fa-network-wired"
+    - title: "VESC Hall Sensor 사용법"
+      url: "/posts/vesc-hall-sensor-guide/"
 
-    - title: "Chassis & Top Plate Assembly"
-      url: "/posts/chassis-top-plate-assembly/"
-      icon: "fas fa-car-side"
+    - title: "서보 모터 입력 전압의 중요성과 BEC 활용 방법"
+      url: "/posts/servo-voltage-bec/"
+
+    - title: "현재 상태 LED로 표시하기 (blink mk3)"
+      url: "/posts/status-led-blink-mk3/"
+
+    - title: "12mm 육각 휠 허브를 17mm로 확장하는 방법"
+      url: "/posts/12mm-to-17mm-hex-hub-adapter/"
+
+    - title: "Unicorn Horn 제작 과정"
+      url: "/posts/unicorn-horn/"
