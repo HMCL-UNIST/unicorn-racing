@@ -2,7 +2,7 @@
 title: Cartographer를 활용한 Mapping 가이드
 author: hangyo-cho
 date: 2026-02-03 11:00:00 +0900
-categories: [racing stack, mapping]
+categories: [Software, mapping]
 tags: [cartographer, lidar, odometry]
 image:
   path: /assets/img/posts/cartographer-mapping/cartographer-mapping-hero.png

@@ -2,7 +2,7 @@
 title: "Racing-Stack Remote Run Guide: Network, SSH, and Docker"
 author: inyoung-choi
 date: 2026-02-02 20:56:07 +0900
-categories: [racing stack, environment]
+categories: [Software, environment]
 tags: [racing-stack, remote, ssh, docker, ros]
 image:
   path: /assets/img/posts/racing-stack-remote-run-guide/fin.png

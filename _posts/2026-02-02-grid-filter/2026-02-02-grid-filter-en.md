@@ -2,7 +2,7 @@
 title: Preventing LiDAR Wall False Detection with Grid Filter
 author: hangyo-cho
 date: 2026-02-02 12:00:00 +0900
-categories: [racing stack, perception]
+categories: [Software, perception]
 tags: [detection, lidar, obstacle]
 image:
   path: /assets/img/posts/grid-filter/grid-filter-hero.png

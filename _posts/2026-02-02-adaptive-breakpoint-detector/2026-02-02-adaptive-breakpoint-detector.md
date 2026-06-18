@@ -2,7 +2,7 @@
 title: Dual-Stage 클러스터링으로 장애물 분리 정밀도 높이기
 author: hangyo-cho
 date: 2026-02-02 13:00:00 +0900
-categories: [racing stack, perception]
+categories: [Software, perception]
 tags: [detection, lidar, obstacle]
 image:
   path: /assets/img/posts/adaptive-breakpoint-detector/dual-stage-detector-hero.png

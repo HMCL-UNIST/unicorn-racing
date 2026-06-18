@@ -2,7 +2,7 @@
 title: Correcting Wheel Slip with Adaptive Wheel Odometry
 author: hangyo-cho
 date: 2026-02-02 11:00:00 +0900
-categories: [racing stack, state estimation]
+categories: [Software, state estimation]
 tags: [cartographer, lidar, odometry]
 image:
   path: /assets/img/posts/adaptive-wheel-odometry/adaptive-odometry-diagram.png

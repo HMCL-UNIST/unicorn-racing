@@ -2,7 +2,7 @@
 title: "Velocity Planner: Speed Profile Generation"
 author: inyoung-choi
 date: 2026-02-03 15:00:00 +0900
-categories: [racing stack, planner]
+categories: [Software, planning]
 tags: [velocity]
 image:
   path: /assets/img/posts/velocity-planner/ggv-diagram.png

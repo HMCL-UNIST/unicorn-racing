@@ -2,7 +2,7 @@
 title: "Docker와 VS Code로 Racing-stack 빌드하기"
 author: inyoung-choi
 date: 2026-02-02 12:00:00 +0900
-categories: [racing stack, environment]
+categories: [Software, environment]
 tags: [docker, vscode, racing-stack]
 image:
   path: /assets/img/posts/racing-stack-build-docker-vscode/docker-vscode-logo.png

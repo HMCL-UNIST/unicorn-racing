@@ -2,7 +2,7 @@
 title: Pure Localization Guide with Cartographer
 author: hangyo-cho
 date: 2026-02-03 10:00:00 +0900
-categories: [racing stack, state estimation]
+categories: [Software, state estimation]
 tags: [Localization, cartographer, imu, lidar, odometry]
 image:
   path: /assets/img/posts/cartographer-localization/cartographer-localization-flow.png

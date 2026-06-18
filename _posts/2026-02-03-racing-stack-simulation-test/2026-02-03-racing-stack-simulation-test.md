@@ -2,7 +2,7 @@
 title: simulation과 함께 racing-stack 사용해보기
 author: inyoung-choi
 date: 2026-02-03 14:00:00 +0900
-categories: [racing stack, environment]
+categories: [Software, environment]
 tags: [simulation, racing-stack, ros]
 image:
   path: /assets/img/posts/racing-stack-simulation-test/image.png
