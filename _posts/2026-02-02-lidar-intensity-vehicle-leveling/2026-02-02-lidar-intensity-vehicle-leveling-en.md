@@ -2,7 +2,7 @@
 title: How to Level Your Vehicle Using LiDAR Intensity Data
 author: hangyo-cho
 date: 2026-02-02 14:00:00 +0900
-categories: [general]
+categories: [build, advanced]
 tags: [LiDAR, RViz, sensor]
 image:
   path: /assets/img/posts/lidar-intensity-vehicle-leveling/rviz-intensity-settings.png

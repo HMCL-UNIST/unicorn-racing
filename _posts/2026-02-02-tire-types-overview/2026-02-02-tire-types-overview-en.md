@@ -2,7 +2,7 @@
 title: "Tire Types: Characteristics and Use Cases"
 author: yunho-lee
 date: 2026-02-02 21:16:14 +0900
-categories: [general, post]
+categories: [build, beginner]
 tags: [tire, wheel]
 image:
   path: /assets/img/posts/tire-types-overview/overview.png

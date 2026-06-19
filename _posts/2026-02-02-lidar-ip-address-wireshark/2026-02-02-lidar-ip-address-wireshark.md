@@ -2,7 +2,7 @@
 title: Wireshark를 이용한 LiDAR 센서 IP 주소 확인 방법
 author: yunho-lee
 date: 2026-02-02 12:00:00 +0900
-categories: [general, debug]
+categories: [build, advanced]
 tags: [lidar]
 image:
   path: /assets/img/posts/lidar-ip-address-wireshark/lidar-overview.png

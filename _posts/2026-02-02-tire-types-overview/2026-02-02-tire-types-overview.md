@@ -2,7 +2,7 @@
 title: "타이어 종류별 특징과 용도 정리"
 author: yunho-lee
 date: 2026-02-02 21:16:14 +0900
-categories: [general, post]
+categories: [build, beginner]
 tags: [tire, wheel]
 image:
   path: /assets/img/posts/tire-types-overview/overview.png

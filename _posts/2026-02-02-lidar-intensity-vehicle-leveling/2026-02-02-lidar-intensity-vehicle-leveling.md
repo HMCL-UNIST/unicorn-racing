@@ -2,7 +2,7 @@
 title: LiDAR Intensity 데이터로 차량 수평 정렬하는 방법
 author: hangyo-cho
 date: 2026-02-02 14:00:00 +0900
-categories: [general]
+categories: [build, advanced]
 tags: [LiDAR, RViz, sensor]
 image:
   path: /assets/img/posts/lidar-intensity-vehicle-leveling/rviz-intensity-settings.png

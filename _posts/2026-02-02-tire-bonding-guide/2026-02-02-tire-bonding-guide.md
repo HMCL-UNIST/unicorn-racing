@@ -2,7 +2,7 @@
 title: "새 타이어 본딩 방법: 순간접착제 사용"
 author: yunho-lee
 date: 2026-02-02 21:13:56 +0900
-categories: [general, post]
+categories: [build, beginner]
 tags: [tire, wheel]
 image:
   path: /assets/img/posts/tire-bonding-guide/overview.png

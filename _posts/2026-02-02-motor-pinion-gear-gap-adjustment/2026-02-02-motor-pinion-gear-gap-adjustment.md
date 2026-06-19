@@ -2,7 +2,7 @@
 title: 모터 피니언 기어와 스퍼기어 간격 조절 방법
 author: yunho-lee
 date: 2026-02-02 13:00:00 +0900
-categories: [general, debug]
+categories: [build, advanced]
 tags: [Chassis, motor]
 image:
   path: /assets/img/posts/motor-pinion-gear-gap-adjustment/pinion-gear-overview.png

@@ -2,7 +2,7 @@
 title: How to Adjust the Gap Between Motor Pinion Gear and Spur Gear
 author: yunho-lee
 date: 2026-02-02 13:00:00 +0900
-categories: [general, debug]
+categories: [build, advanced]
 tags: [Chassis, motor]
 image:
   path: /assets/img/posts/motor-pinion-gear-gap-adjustment/pinion-gear-overview.png
