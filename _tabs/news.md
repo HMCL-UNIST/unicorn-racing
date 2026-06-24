@@ -1,6 +1,7 @@
 ---
+title: News
 icon: fas fa-newspaper
-order: 6
+order: 5
 ---
 
 <style>
