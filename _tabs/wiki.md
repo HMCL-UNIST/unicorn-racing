@@ -129,6 +129,61 @@ order: 0
   .hw-arrow { justify-content: center; transform: rotate(90deg); }
   .hw-spec th { width: 40%; }
 }
+
+/* Key components grid */
+.hw-parts {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+.part-card {
+  border: 1px solid var(--border-color, #ddd);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--card-bg, #fff);
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.part-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.12); transform: translateY(-2px); }
+.part-card a { color: inherit; text-decoration: none !important; border-bottom: none !important; display: flex; flex-direction: column; height: 100%; }
+.part-photo {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background: #fafafa;
+  padding: 6px;
+  border-bottom: 1px solid var(--border-color, #ddd);
+}
+.part-photo--todo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 0.82em;
+  color: var(--text-muted-color, #6c757d);
+  background: repeating-linear-gradient(45deg, var(--card-bg,#f7f7f7), var(--card-bg,#f7f7f7) 10px, rgba(127,127,127,0.06) 10px, rgba(127,127,127,0.06) 20px);
+}
+.part-body { padding: 12px 14px; }
+.part-name { font-weight: 700; font-size: 0.96em; }
+.part-model { font-size: 0.85em; color: var(--text-color); margin-top: 2px; }
+.part-specs {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  font-size: 0.78em;
+  color: var(--text-muted-color, #6c757d);
+  line-height: 1.5;
+}
+.part-specs li { padding: 1px 0 1px 12px; position: relative; }
+.part-specs li::before {
+  content: "·";
+  position: absolute;
+  left: 2px;
+  color: var(--link-color, #0066cc);
+  font-weight: 700;
+}
 </style>
 
 <!-- ===================== Hardware Overview ===================== -->
@@ -203,6 +258,109 @@ order: 0
       <span class="hw-num">4</span>
       <span class="hw-name"><span data-lang="ko">정렬 · 캘리브레이션</span><span data-lang="en">Calibration</span></span>
       <span class="hw-sub"><span data-lang="ko">ERPM · 서보 · TF</span><span data-lang="en">ERPM · servo · TF</span></span>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== Key Components ===================== -->
+<div class="wiki-section-title">
+  <i class="fas fa-microchip"></i>
+  <h2><span data-lang="ko">주요 부품</span><span data-lang="en">Key Components</span></h2>
+</div>
+
+<div class="hw-parts">
+
+  <div class="part-card">
+    <a href="{{ '/posts/chassis-top-plate-assembly/' | relative_url }}">
+      <img class="part-photo" src="/assets/img/posts/chassis-top-plate-assembly/srx8-empty.jpg" alt="Serpent SRX8 chassis">
+      <div class="part-body">
+        <div class="part-name"><span data-lang="ko">섀시</span><span data-lang="en">Chassis</span></div>
+        <div class="part-model">Serpent SRX8</div>
+        <ul class="part-specs">
+          <li><span data-lang="ko">1/8 스케일 부기</span><span data-lang="en">1/8-scale buggy</span></li>
+          <li><span data-lang="ko">알루미늄 + 카본 하판</span><span data-lang="en">Aluminum + carbon deck</span></li>
+          <li><span data-lang="ko">17mm 육각 휠</span><span data-lang="en">17 mm hex wheels</span></li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div class="part-card">
+    <a href="{{ '/posts/vesc-general-tab-motor-settings/' | relative_url }}">
+      <img class="part-photo" src="/assets/img/posts/vesc-imu/overview.png" alt="VESC 6 MK VI">
+      <div class="part-body">
+        <div class="part-name"><span data-lang="ko">모터 컨트롤러</span><span data-lang="en">Motor Controller</span></div>
+        <div class="part-model">VESC 6 MK VI</div>
+        <ul class="part-specs">
+          <li><span data-lang="ko">60V 정격 (최대 12S)</span><span data-lang="en">60 V rated (up to 12S)</span></li>
+          <li><span data-lang="ko">연속 80A · 피크 120A</span><span data-lang="en">80 A cont. · 120 A peak</span></li>
+          <li><span data-lang="ko">FOC 제어 · 내장 IMU</span><span data-lang="en">FOC control · built-in IMU</span></li>
+          <li><span data-lang="ko">권장 펌웨어 6.05</span><span data-lang="en">Firmware 6.05 recommended</span></li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div class="part-card">
+    <a href="{{ '/posts/lidar-ip-address-wireshark/' | relative_url }}">
+      <img class="part-photo" src="/assets/img/posts/lidar-ip-address-wireshark/lidar-overview.png" alt="Hokuyo LiDAR">
+      <div class="part-body">
+        <div class="part-name">LiDAR</div>
+        <div class="part-model">Hokuyo UST-10LX / 30LX</div>
+        <ul class="part-specs">
+          <li><span data-lang="ko">2D 스캔 · 270° 시야각</span><span data-lang="en">2D scan · 270° FOV</span></li>
+          <li><span data-lang="ko">각분해능 0.25° · 40Hz</span><span data-lang="en">0.25° resolution · 40 Hz</span></li>
+          <li><span data-lang="ko">측정거리 10m / 30m</span><span data-lang="en">10 m / 30 m range</span></li>
+          <li><span data-lang="ko">이더넷 연결</span><span data-lang="en">Ethernet interface</span></li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div class="part-card">
+    <a href="{{ '/posts/servo-voltage-bec/' | relative_url }}">
+      <img class="part-photo" src="/assets/img/posts/servo-voltage-bec/b210-servo.png" alt="Steering servo">
+      <div class="part-body">
+        <div class="part-name"><span data-lang="ko">조향 서보</span><span data-lang="en">Steering Servo</span></div>
+        <div class="part-model">HIGHEST B210 HV</div>
+        <ul class="part-specs">
+          <li><span data-lang="ko">브러시리스 · 풀메탈 기어 (25T)</span><span data-lang="en">Brushless · full metal gear (25T)</span></li>
+          <li><span data-lang="ko">토크 24.5 / 31.1 kg·cm (6.0 / 7.4V)</span><span data-lang="en">24.5 / 31.1 kg·cm (6.0 / 7.4 V)</span></li>
+          <li><span data-lang="ko">속도 0.12 / 0.09 s·60°</span><span data-lang="en">0.12 / 0.09 s·60°</span></li>
+          <li><span data-lang="ko">6.0–7.4V (Matek BEC 공급) · 73g</span><span data-lang="en">6.0–7.4 V (via Matek BEC) · 73 g</span></li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div class="part-card">
+    <a href="{{ '/posts/status-led-blink-mk3/' | relative_url }}">
+      <img class="part-photo" src="/assets/img/posts/unicorn-horn/horn-overview-2026.png" alt="Status LED unicorn horn">
+      <div class="part-body">
+        <div class="part-name"><span data-lang="ko">상태 LED</span><span data-lang="en">Status LED</span></div>
+        <div class="part-model"><span data-lang="ko">유니콘 혼 (Blink mk3)</span><span data-lang="en">Unicorn horn (Blink mk3)</span></div>
+        <ul class="part-specs">
+          <li><span data-lang="ko">3D 프린트 혼 하우징</span><span data-lang="en">3D-printed horn housing</span></li>
+          <li><span data-lang="ko">어드레서블 LED</span><span data-lang="en">Addressable LED</span></li>
+          <li><span data-lang="ko">ROS로 주행 상태 표시</span><span data-lang="en">ROS-driven status display</span></li>
+        </ul>
+      </div>
+    </a>
+  </div>
+
+  <div class="part-card">
+    <div class="part-photo part-photo--todo">
+      <span data-lang="ko">📷 사진 준비 중</span><span data-lang="en">📷 photo coming</span>
+    </div>
+    <div class="part-body">
+      <div class="part-name"><span data-lang="ko">연산 보드</span><span data-lang="en">Compute</span></div>
+      <div class="part-model"><span data-lang="ko">2가지 구성</span><span data-lang="en">Two options</span></div>
+      <ul class="part-specs">
+        <li>Intel NUC <span data-lang="ko">(x86 · 무거운 연산)</span><span data-lang="en">(x86 · heavy compute)</span></li>
+        <li>NVIDIA Jetson Orin NX <span data-lang="ko">(경량 · GPU)</span><span data-lang="en">(lightweight · GPU)</span></li>
+        <li><span data-lang="ko">상판에 장착, VESC와 연결</span><span data-lang="en">Mounted on upper plate, wired to VESC</span></li>
+      </ul>
     </div>
   </div>
 
