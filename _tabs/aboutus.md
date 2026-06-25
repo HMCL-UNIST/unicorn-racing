@@ -54,21 +54,21 @@ permalink: /aboutus/
 
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 20px;">
   <a href="https://github.com/HMCL-UNIST/UNICORN" style="text-decoration: none; color: inherit;">
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
+    <div style="border: 1px solid var(--border-color, #ddd); border-radius: 8px; padding: 20px; background: var(--card-bg); transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
       <h4 style="margin-top: 0;">🔗 UNICORN Racing GitHub</h4>
-      <p style="margin-bottom: 0; color: #666;">github.com/HMCL-UNIST/UNICORN</p>
+      <p style="margin-bottom: 0; color: var(--text-muted-color, #666);">github.com/HMCL-UNIST/UNICORN</p>
     </div>
   </a>
   <a href="https://hmc.unist.ac.kr/" style="text-decoration: none; color: inherit;">
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
+    <div style="border: 1px solid var(--border-color, #ddd); border-radius: 8px; padding: 20px; background: var(--card-bg); transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
       <h4 style="margin-top: 0;">🏠 HMCL Homepage</h4>
-      <p style="margin-bottom: 0; color: #666;">hmc.unist.ac.kr</p>
+      <p style="margin-bottom: 0; color: var(--text-muted-color, #666);">hmc.unist.ac.kr</p>
     </div>
   </a>
   <a href="https://www.youtube.com/@hmcl-nd9bj" style="text-decoration: none; color: inherit;">
-    <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
+    <div style="border: 1px solid var(--border-color, #ddd); border-radius: 8px; padding: 20px; background: var(--card-bg); transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
       <h4 style="margin-top: 0;">📺 HMCL YouTube</h4>
-      <p style="margin-bottom: 0; color: #666;">youtube.com/@hmcl-nd9bj</p>
+      <p style="margin-bottom: 0; color: var(--text-muted-color, #666);">youtube.com/@hmcl-nd9bj</p>
     </div>
   </a>
 </div>
