@@ -1,7 +1,7 @@
 ---
 title: "맵 이미지에서 Centerline과 트랙 경계 추출하기"
 date: 2026-06-26 14:30:00 +0900
-categories: [Software, mapping]
+categories: [Software, planning]
 tags: [mapping, centerline, global-planning, opencv]
 lang: ko
 lang_ref: centerline-extraction

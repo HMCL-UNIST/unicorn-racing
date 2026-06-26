@@ -2,7 +2,7 @@
 title: "Joint Optimization: A Min-Time Racing Line Solving Path and Speed Together"
 author: inyoung-choi
 date: 2026-06-26 16:00:00 +0900
-categories: [Software, race design]
+categories: [Software, planning]
 tags: [raceline, optimization, nlp, ipopt, min-time]
 lang: en
 lang_ref: joint-optimization-racing-line

@@ -1,7 +1,7 @@
 ---
 title: "Extracting Centerline and Track Boundaries from a Map Image"
 date: 2026-06-26 14:30:00 +0900
-categories: [Software, mapping]
+categories: [Software, planning]
 tags: [mapping, centerline, global-planning, opencv]
 lang: en
 lang_ref: centerline-extraction
