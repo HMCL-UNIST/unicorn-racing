@@ -12,7 +12,7 @@
     (function () {
       try {
         var stored = localStorage.getItem('lang');
-        var fallback = document.documentElement.getAttribute('lang') || 'ko';
+        var fallback = document.documentElement.getAttribute('lang') || 'en';
         var lang = stored || fallback;
         document.documentElement.setAttribute('data-lang-pref', lang);
       } catch (e) {}
