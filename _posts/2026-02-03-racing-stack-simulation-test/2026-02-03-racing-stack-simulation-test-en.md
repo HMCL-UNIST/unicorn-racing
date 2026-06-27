@@ -1,9 +1,9 @@
 ---
-title: Testing Racing-Stack with Simulation
+title: Testing the ROS 1 Racing-Stack with Simulation
 author: inyoung-choi
 date: 2026-02-03 14:00:00 +0900
 categories: [racing stack, environment]
-tags: [simulation, racing-stack, ros]
+tags: [simulation, racing-stack, ros1]
 image:
   path: /assets/img/posts/racing-stack-simulation-test/image.png
 lang: en
