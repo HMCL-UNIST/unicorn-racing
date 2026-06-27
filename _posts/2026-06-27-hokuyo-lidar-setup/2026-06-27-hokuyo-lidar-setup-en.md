@@ -30,8 +30,8 @@ The Ethernet interface of the board connected to the LiDAR must be set to a stat
 Go to **Settings → Network → Wired settings button → IPv4**.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-1.png" alt="Network settings">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-2.png" alt="IPv4 settings">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-1.png" alt="Network settings">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-2.png" alt="IPv4 settings">
 </div>
 
 - **Address**: Keep the first three octets identical to the LiDAR IP and change only the last number. (e.g. `192.168.0.20`)
@@ -43,8 +43,8 @@ Go to **Settings → Network → Wired settings button → IPv4**.
 To apply the settings, turn the wired connection off and back on.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-3.png" alt="Turn connection off">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-4.png" alt="Turn connection on">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-3.png" alt="Turn connection off">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-4.png" alt="Turn connection on">
 </div>
 
 ## 2. Sensor Data Check
@@ -95,15 +95,15 @@ rviz2
 Add the `scan` topic.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-6.png" alt="Add scan topic">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-7.png" alt="Add scan topic">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-6.png" alt="Add scan topic">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-7.png" alt="Add scan topic">
 </div>
 
 Set the **Fixed Frame** and the topic **QoS**.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-8.png" alt="Set Fixed Frame">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-9.png" alt="Set Topic QoS">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-8.png" alt="Set Fixed Frame">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-9.png" alt="Set Topic QoS">
 </div>
 
 > If the LiDAR scan does not show up, make sure the scan topic's **Reliability Policy is set to Best Effort**. Sensor data is usually published as Best Effort.

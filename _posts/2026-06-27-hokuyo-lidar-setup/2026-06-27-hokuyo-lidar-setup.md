@@ -30,8 +30,8 @@ LiDAR와 연결된 보드의 이더넷을 static IP로 설정해주어야 합니
 **설정 → 네트워크 → 유선(Wired) 설정 버튼 → IPv4** 로 이동합니다.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-1.png" alt="네트워크 설정">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-2.png" alt="IPv4 설정">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-1.png" alt="네트워크 설정">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-2.png" alt="IPv4 설정">
 </div>
 
 - **Address**: LiDAR IP와 앞 3자리는 동일하게 두고, 마지막 번호만 다르게 설정합니다. (예: `192.168.0.20`)
@@ -43,8 +43,8 @@ LiDAR와 연결된 보드의 이더넷을 static IP로 설정해주어야 합니
 설정을 적용하려면 유선 연결을 껐다가 다시 켜야 합니다.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-3.png" alt="연결 끄기">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-4.png" alt="연결 켜기">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-3.png" alt="연결 끄기">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-4.png" alt="연결 켜기">
 </div>
 
 ## 2. 센서 데이터 확인
@@ -95,15 +95,15 @@ rviz2
 `scan` 토픽을 추가합니다.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-6.png" alt="scan 토픽 추가">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-7.png" alt="scan 토픽 추가">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-6.png" alt="scan 토픽 추가">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-7.png" alt="scan 토픽 추가">
 </div>
 
 **Fixed Frame**과 토픽의 **QoS**를 설정합니다.
 
 <div class="lidar-img-row">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-8.png" alt="Fixed Frame 설정">
-  <img src="{{ site.baseurl }}/assets/img/posts/hokuyo-lidar-setup/image-9.png" alt="Topic QoS 설정">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-8.png" alt="Fixed Frame 설정">
+  <img src="/assets/img/posts/hokuyo-lidar-setup/image-9.png" alt="Topic QoS 설정">
 </div>
 
 > LiDAR 스캔 데이터가 보이지 않으면, scan 토픽의 **Reliability Policy를 Best Effort**로 설정했는지 확인하세요. 센서 데이터는 보통 Best Effort로 발행됩니다.
