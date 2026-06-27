@@ -49,7 +49,7 @@ vesc/**:
 
 ## 3. Verify the Connection
 
-> If you have not built the UNICORN Racing Stack yet, please build it first.
+> If you have not built the UNICORN Racing Stack on the car yet, please complete [Building the UNICORN Racing Stack on the RaceCar]({{ site.baseurl }}/posts/racing-stack-build-racecar-en/) first.
 {: .prompt-warning }
 
 ### 3.1 Launch Low Level

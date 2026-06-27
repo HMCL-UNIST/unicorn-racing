@@ -12,7 +12,7 @@ lang_ref: racing-stack-build-simulation-remote
 
 실제 차량 없이도 노트북에서 **시뮬레이션**을 돌리거나 **원격으로 레이스를 제어**할 수 있도록, UNICORN Racing Stack을 빌드하는 방법을 정리했습니다. 전체 코드는 [UNICORN Racing Stack 저장소](https://github.com/HMCL-UNIST/unicorn-racing-stack)에서 확인할 수 있습니다.
 
-> 이 가이드는 **노트북/시뮬레이션용 빌드**입니다. 하드웨어 전용 노드와 매핑·로컬라이제이션은 제외하고 빌드됩니다. 실제 차량용 빌드는 `setup_conda_onCar.sh`를 사용합니다.
+> 이 가이드는 **노트북/시뮬레이션용 빌드**입니다. 하드웨어 전용 노드와 매핑·로컬라이제이션은 제외하고 빌드됩니다. 실제 차량용 빌드는 [실차(RaceCar)에서 UNICORN Racing Stack 빌드]({{ site.baseurl }}/posts/racing-stack-build-racecar/)(`setup_conda_onCar.sh`)를 참고하세요.
 {: .prompt-info }
 
 ## 0. Conda 환경 준비

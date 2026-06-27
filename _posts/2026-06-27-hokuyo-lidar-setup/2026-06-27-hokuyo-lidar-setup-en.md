@@ -49,7 +49,7 @@ To apply the settings, turn the wired connection off and back on.
 
 ## 2. Sensor Data Check
 
-> If you have not built the UNICORN Racing Stack yet, please build it first.
+> If you have not built the UNICORN Racing Stack on the car yet, please complete [Building the UNICORN Racing Stack on the RaceCar]({{ site.baseurl }}/posts/racing-stack-build-racecar-en/) first.
 {: .prompt-warning }
 
 ### 2-1. Verify the LiDAR IP

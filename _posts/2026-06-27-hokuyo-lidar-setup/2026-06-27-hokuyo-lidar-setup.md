@@ -49,7 +49,7 @@ LiDAR와 연결된 보드의 이더넷을 static IP로 설정해주어야 합니
 
 ## 2. 센서 데이터 확인
 
-> 아직 UNICORN Racing Stack을 빌드하지 않았다면, 먼저 빌드를 완료해주세요.
+> 아직 차량에 UNICORN Racing Stack을 빌드하지 않았다면, [실차(RaceCar)에서 UNICORN Racing Stack 빌드]({{ site.baseurl }}/posts/racing-stack-build-racecar/)를 먼저 완료해주세요.
 {: .prompt-warning }
 
 ### 2-1. LiDAR IP 설정 확인

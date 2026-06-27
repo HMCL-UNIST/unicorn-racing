@@ -49,7 +49,7 @@ vesc/**:
 
 ## 3. 연결 확인하기
 
-> 아직 UNICORN Racing Stack을 빌드하지 않았다면, 먼저 빌드를 완료해주세요.
+> 아직 차량에 UNICORN Racing Stack을 빌드하지 않았다면, [실차(RaceCar)에서 UNICORN Racing Stack 빌드]({{ site.baseurl }}/posts/racing-stack-build-racecar/)를 먼저 완료해주세요.
 {: .prompt-warning }
 
 ### 3.1 Low Level 실행

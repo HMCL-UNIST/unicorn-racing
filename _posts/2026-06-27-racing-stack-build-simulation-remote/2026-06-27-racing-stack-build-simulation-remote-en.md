@@ -12,7 +12,7 @@ lang_ref: racing-stack-build-simulation-remote
 
 This guide explains how to build the UNICORN Racing Stack so you can run **simulations** or **control a race remotely** from your laptop, without a physical vehicle. The full source is available in the [UNICORN Racing Stack repository](https://github.com/HMCL-UNIST/unicorn-racing-stack).
 
-> This is a **laptop/simulation build**. Hardware-only nodes, mapping, and localization are skipped. For the actual vehicle, use `setup_conda_onCar.sh` instead.
+> This is a **laptop/simulation build**. Hardware-only nodes, mapping, and localization are skipped. For the actual vehicle, see [Building the UNICORN Racing Stack on the RaceCar]({{ site.baseurl }}/posts/racing-stack-build-racecar-en/) (`setup_conda_onCar.sh`).
 {: .prompt-info }
 
 ## 0. Conda Setup
