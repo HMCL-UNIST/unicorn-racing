@@ -16,7 +16,7 @@ timezone: Asia/Seoul
 
 title: UNICORN Racing # the main title
 
-tagline: for autonomous racing # it will display as the subtitle
+tagline: Autonomous racing team, HMCLab, UNIST, South Korea # it will display as the subtitle
 
 description: >- # used by seo meta and the atom feed
   UNICORN Racing is an autonomous racing research group from the High Assurance Mobility Lab at UNIST,
