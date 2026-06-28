@@ -25,6 +25,12 @@ heedo-kim:
   name: Heedo Kim
   url: https://github.com/heedo7425  # 선택사항
 
+seongjun-lee:
+  name: Seongjun Lee
+
+hyeong-gyun-noh:
+  name: Hyeong Gyun Noh
+
 # 추가 저자 예시:
 # cotes:
 #   name: Cotes Chung
