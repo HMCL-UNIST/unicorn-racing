@@ -65,10 +65,10 @@ permalink: /aboutus/
       <p style="margin-bottom: 0; color: #666;">hmc.unist.ac.kr</p>
     </div>
   </a>
-  <a href="https://www.youtube.com/@hmcl-nd9bj" style="text-decoration: none; color: inherit;">
+  <a href="https://www.youtube.com/@UnicornRacing-hmcl" style="text-decoration: none; color: inherit;">
     <div style="border: 1px solid #ddd; border-radius: 8px; padding: 20px; transition: box-shadow 0.3s; cursor: pointer;" onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onmouseout="this.style.boxShadow='none'">
-      <h4 style="margin-top: 0;">📺 HMCL YouTube</h4>
-      <p style="margin-bottom: 0; color: #666;">youtube.com/@hmcl-nd9bj</p>
+      <h4 style="margin-top: 0;">📺 UNICORN Racing YouTube</h4>
+      <p style="margin-bottom: 0; color: #666;">youtube.com/@UnicornRacing-hmcl</p>
     </div>
   </a>
 </div>
