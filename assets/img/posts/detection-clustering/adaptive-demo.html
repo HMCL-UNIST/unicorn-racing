@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3550;
+    --text:#e6edf3; --muted:#8b98a5; --accent:#4cc2ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:13px; line-height:1.4;
+  }
+  header{padding:16px 20px 8px; border-bottom:1px solid var(--line)}
+  header h1{margin:0 0 4px; font-size:18px; font-weight:600}
+  header p{margin:0; color:var(--muted); font-size:12px}
+  header a{color:var(--accent); text-decoration:none}
+  header a:hover{text-decoration:underline}
+  .wrap{padding:16px 20px 40px; max-width:1200px; margin:0 auto}
+  .globals{
+    display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-bottom:16px;
+  }
+  .ctrl{display:flex; flex-direction:column; gap:3px; min-width:120px}
+  .ctrl label{font-size:11px; color:var(--muted); display:flex; justify-content:space-between; gap:8px}
+  .ctrl label b{color:var(--accent); font-weight:600; font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%; accent-color:var(--accent)}
+  select,button{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line);
+    border-radius:7px; padding:6px 10px; font-size:12px; cursor:pointer;
+  }
+  button:hover,select:hover{border-color:var(--accent)}
+  .chk{flex-direction:row; align-items:center; gap:6px; min-width:auto}
+  .chk input{accent-color:var(--accent)}
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+  }
+  canvas{width:100%; background:#0a0d12; border-radius:8px; display:block}
+  .stats{margin-top:8px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; min-height:16px}
+  .stats b{color:var(--text)}
+  .pctrls{display:flex; flex-wrap:wrap; gap:10px 20px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line)}
+  .pctrls .ctrl{min-width:150px; flex:0 1 220px}
+  .legend{
+    margin-top:16px; color:var(--muted); font-size:11px; display:flex; flex-wrap:wrap;
+    gap:6px 18px; align-items:center;
+  }
+  .legend .sw{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle}
+  code{background:var(--panel2); padding:1px 5px; border-radius:4px; font-size:11px}
+</style></head>
+<body><header>
+  <h1>Adaptive Breakpoint Detector (ABD)</h1>
+  <p>Adapt the threshold <code>D_max</code> proportionally to range <code>r</code> to remove over-segmentation of distant objects · O(n) · first-quadrant 90° FoV · 1° step scan.
+     &nbsp;<a href="breakpoint-demo.html">→ Fixed Breakpoint version</a></p>
+</header>
+
+<div class="wrap">
+  <div class="globals">
+    <div class="ctrl">
+      <label for="res">Angular res (deg) <b id="resV">1.0</b></label>
+      <input type="range" id="res" min="0.5" max="3" step="0.5" value="1">
+    </div>
+    <div class="ctrl">
+      <label for="noise">Noise σ (m) <b id="noiseV">0.010</b></label>
+      <input type="range" id="noise" min="0" max="0.05" step="0.002" value="0.01">
+    </div>
+    <div class="ctrl">
+      <label for="minsize">Min cluster size <b id="minsizeV">3</b></label>
+      <input type="range" id="minsize" min="1" max="12" step="1" value="3">
+    </div>
+    <div class="ctrl chk"><input type="checkbox" id="showWalls" checked><label for="showWalls" style="color:var(--text)">Show walls</label></div>
+    <button id="regen">🎲 Regenerate</button>
+  </div>
+
+  <div class="globals">
+    <div class="ctrl chk"><input type="checkbox" id="placeMode"><label for="placeMode" style="color:var(--text)">➕ Place boxes</label></div>
+    <div class="ctrl">
+      <label for="boxLen">Box length (m) <b id="boxLenV">1.20</b></label>
+      <input type="range" id="boxLen" min="0.1" max="3.0" step="0.05" value="1.2">
+    </div>
+    <div class="ctrl">
+      <label for="boxWid">Box width (m) <b id="boxWidV">0.60</b></label>
+      <input type="range" id="boxWid" min="0.1" max="2.0" step="0.05" value="0.6">
+    </div>
+    <div class="ctrl">
+      <label for="boxAng">Box angle (deg) <b id="boxAngV">0</b></label>
+      <input type="range" id="boxAng" min="0" max="180" step="5" value="0">
+    </div>
+    <button id="clearBoxes">🗑 Clear boxes</button>
+    <span style="color:var(--muted); font-size:11px; align-self:center">
+      turn on <b style="color:var(--accent)">Place boxes</b>, then click empty space = add · click a box = remove · <b style="color:var(--accent)">drag = move</b>
+    </span>
+  </div>
+
+  <div class="panel">
+    <canvas id="cv"></canvas>
+    <div class="stats" id="st"></div>
+    <div class="stats" id="stFocus"></div>
+    <div class="pctrls">
+      <div class="ctrl"><label>λ (deg) <b id="lambdaV">10</b></label>
+        <input type="range" id="lambda" min="1" max="30" step="1" value="10"></div>
+      <div class="ctrl"><label>σ (m) <b id="sigmaV">0.010</b></label>
+        <input type="range" id="sigma" min="0.001" max="0.05" step="0.001" value="0.01"></div>
+      <div class="ctrl chk" style="align-self:end"><input type="checkbox" id="showCircle" checked><label for="showCircle" style="color:var(--text)">Show threshold circle</label></div>
+      <div class="ctrl"><label>focus pair (p<sub>n-1</sub>→p<sub>n</sub>) <b id="focusV">–</b></label>
+        <input type="range" id="focus" min="1" max="1" step="1" value="1"></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="sw" style="background:#e6194B"></span>Color = cluster</span>
+    <span><span class="sw" style="background:#555"></span>Gray = noise</span>
+    <span><span class="sw" style="background:#2a3550"></span>Walls / obstacles (ground truth)</span>
+    <span><span class="sw" style="background:#4cc2ff"></span>Threshold circle · <code>D_max = r·sin(Δθ)/sin(λ−Δθ) + 3σ</code></span>
+    <span>First-quadrant 90° FoV · 1° step · the point after the focus point <b style="color:#3cb44b">inside</b> the circle = same cluster · <b style="color:#e6194B">outside</b> = breakpoint</span>
+  </div>
+</div>
+
+
+<script>
+"use strict";
+// ---------- seeded RNG ----------------------------------------------
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function gauss(rng, mean, std){
+  let u = 0, v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return mean + std * Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+// ---------- environment ---------------------------------------------
+function rectSegments(cx, cy, w, h){
+  const hw = w/2, hh = h/2;
+  const c = [[cx-hw,cy-hh],[cx+hw,cy-hh],[cx+hw,cy+hh],[cx-hw,cy+hh]];
+  const s = [];
+  for (let i=0;i<4;i++){ const a=c[i], b=c[(i+1)%4]; s.push({x1:a[0],y1:a[1],x2:b[0],y2:b[1]}); }
+  return s;
+}
+function rectSegmentsRot(cx, cy, w, h, angle){
+  const hw = w/2, hh = h/2, ca = Math.cos(angle), sa = Math.sin(angle);
+  const c = [[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].map(([x,y]) => [cx + x*ca - y*sa, cy + x*sa + y*ca]);
+  const s = [];
+  for (let i=0;i<4;i++){ const a=c[i], b=c[(i+1)%4]; s.push({x1:a[0],y1:a[1],x2:b[0],y2:b[1]}); }
+  return s;
+}
+function buildEnvironment(){
+  // First-quadrant room: sensor sits at the corner (origin); two far walls give the background.
+  // Every obstacle (incl. the two defaults) lives in state.boxes, so all are drag/remove-able.
+  const W = 9;
+  const segments = [
+    {x1:W, y1:0, x2:W, y2:W},    // right wall (x = W)
+    {x1:0, y1:W, x2:W, y2:W},    // top wall   (y = W)
+  ];
+  const circles = [];
+  for (const bx of state.boxes) segments.push(...rectSegmentsRot(bx.x, bx.y, bx.w, bx.h, bx.angle));
+  return {segments, circles};
+}
+
+// ---------- ray casting ---------------------------------------------
+function crossZ(px, py, qx, qy){ return px*qy - py*qx; }
+function raySegment(dx, dy, s){
+  const ax = s.x1, ay = s.y1, ex = s.x2-s.x1, ey = s.y2-s.y1;
+  const denom = crossZ(dx, dy, ex, ey);
+  if (Math.abs(denom) < 1e-12) return Infinity;
+  const t = crossZ(ax, ay, ex, ey) / denom;
+  const u = crossZ(ax, ay, dx, dy) / denom;
+  return (t >= 0 && u >= 0 && u <= 1) ? t : Infinity;
+}
+function rayCircle(dx, dy, c){
+  const b = dx*c.cx + dy*c.cy, cc = c.cx*c.cx + c.cy*c.cy - c.r*c.r, disc = b*b - cc;
+  if (disc < 0) return Infinity;
+  const sq = Math.sqrt(disc), t1 = b - sq, t2 = b + sq;
+  if (t1 >= 0) return t1;
+  if (t2 >= 0) return t2;
+  return Infinity;
+}
+function generateScan(resDeg, noiseSigma, seed){
+  const env = buildEnvironment();
+  const rng = mulberry32(seed);
+  const maxRange = 30, step = resDeg*Math.PI/180;
+  const nBeams = Math.round((Math.PI/2)/step) + 1;   // 0° … 90° (first quadrant)
+  const points = [];
+  for (let i=0;i<nBeams;i++){
+    const theta = i*step, dx = Math.cos(theta), dy = Math.sin(theta);
+    let t = maxRange;
+    for (const s of env.segments) t = Math.min(t, raySegment(dx, dy, s));
+    for (const c of env.circles)  t = Math.min(t, rayCircle(dx, dy, c));
+    if (t >= maxRange*0.999) continue;
+    const r = t + gauss(rng, 0, noiseSigma);
+    if (r <= 0) continue;
+    points.push({ x:r*dx, y:r*dy, r, theta });
+  }
+  return {points, env};
+}
+
+// ---------- clustering: Adaptive Breakpoint Detector ----------------
+function finalize(labels){
+  const map = new Map(); let next = 0, noise = 0;
+  const out = new Array(labels.length);
+  for (let i=0;i<labels.length;i++){
+    const l = labels[i];
+    if (l < 0){ out[i] = -1; noise++; continue; }
+    if (!map.has(l)) map.set(l, next++);
+    out[i] = map.get(l);
+  }
+  return {labels: out, count: next, noise};
+}
+function dropSmall(labels, minSize){
+  const sizes = new Map();
+  for (const l of labels) if (l >= 0) sizes.set(l, (sizes.get(l)||0)+1);
+  for (let i=0;i<labels.length;i++)
+    if (labels[i] >= 0 && sizes.get(labels[i]) < minSize) labels[i] = -1;
+  return finalize(labels);
+}
+// adaptive threshold for the gap between points[i-1] and points[i]
+function dmaxOf(rPrev, dphi, lambdaRad, sigma){
+  if (dphi >= lambdaRad) return -1;                                  // skipped beams -> break
+  return rPrev * Math.sin(dphi) / Math.sin(lambdaRad - dphi) + 3*sigma;
+}
+function abd(points, lambdaDeg, sigma, minSize){
+  const n = points.length;
+  const labels = new Array(n).fill(-1);
+  if (n === 0) return finalize(labels);
+  const lambda = lambdaDeg * Math.PI/180;
+  let cid = 0; labels[0] = 0;
+  for (let i=1;i<n;i++){
+    const dphi = Math.abs(points[i].theta - points[i-1].theta);
+    const Dmax = dmaxOf(points[i-1].r, dphi, lambda, sigma);
+    const d = Math.hypot(points[i].x-points[i-1].x, points[i].y-points[i-1].y);
+    if (!(d <= Dmax)) cid++;                                         // Dmax = -1 -> always break
+    labels[i] = cid;
+  }
+  return dropSmall(labels, minSize);
+}
+
+// ---------- rendering ------------------------------------------------
+const PALETTE = ['#e6194B','#3cb44b','#4363d8','#f58231','#911eb4','#42d4f4',
+                 '#f032e6','#bfef45','#fabed4','#469990','#ffe119','#9A6324',
+                 '#dcbeff','#aaffc3','#ffd8b1','#a9a9a9'];
+const NOISE_COLOR = '#555';
+const GL = { rn1:'rₙ₋₁', rn:'rₙ', pn1:'pₙ₋₁', pn:'pₙ', dth:'Dₜₕ' };
+function setupCanvas(cv){
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = cv.clientWidth || 900, cssH = Math.round(cssW * 0.66);
+  cv.style.height = cssH + 'px';
+  cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssH*dpr);
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, cssW, cssH};
+}
+function makeTransform(cssW, cssH){
+  // first quadrant only: sensor (0,0) at bottom-left of a centered square view
+  const pad = 26, xmax = 9.6, ymax = 9.6;
+  const scale = Math.min((cssW-2*pad)/xmax, (cssH-2*pad)/ymax);
+  const offX = (cssW - scale*xmax)/2, offY = (cssH + scale*ymax)/2;
+  return { sx:(x)=>offX + scale*x, sy:(y)=>offY - scale*y, scale };
+}
+function drawPanel(cv, points, result, env, opts){
+  const {ctx, cssW, cssH} = setupCanvas(cv);
+  const T = makeTransform(cssW, cssH);
+  ctx.clearRect(0,0,cssW,cssH);
+  if (opts.showWalls){
+    ctx.strokeStyle = '#2a3550'; ctx.lineWidth = 1.5;
+    for (const s of env.segments){ ctx.beginPath(); ctx.moveTo(T.sx(s.x1),T.sy(s.y1)); ctx.lineTo(T.sx(s.x2),T.sy(s.y2)); ctx.stroke(); }
+    for (const c of env.circles){ ctx.beginPath(); ctx.arc(T.sx(c.cx),T.sy(c.cy),c.r*T.scale,0,2*Math.PI); ctx.stroke(); }
+  }
+  if (state.boxes.length){
+    ctx.strokeStyle = 'rgba(76,194,255,0.7)'; ctx.lineWidth = 1.4;
+    for (const b of state.boxes){
+      const segs = rectSegmentsRot(b.x, b.y, b.w, b.h, b.angle);
+      ctx.beginPath(); ctx.moveTo(T.sx(segs[0].x1), T.sy(segs[0].y1));
+      for (const s of segs) ctx.lineTo(T.sx(s.x2), T.sy(s.y2));
+      ctx.closePath(); ctx.stroke();
+    }
+  }
+  const labels = result.labels;
+  for (let i=0;i<points.length;i++){
+    const l = labels[i];
+    ctx.fillStyle = (l < 0) ? NOISE_COLOR : PALETTE[l % PALETTE.length];
+    ctx.beginPath(); ctx.arc(T.sx(points[i].x), T.sy(points[i].y), (l<0?1.4:2.2), 0, 2*Math.PI); ctx.fill();
+  }
+  if (opts.showCentroid && result.count > 0){
+    const sum = Array.from({length: result.count}, () => ({x:0,y:0,n:0}));
+    for (let i=0;i<points.length;i++){ const l=labels[i]; if(l<0)continue; sum[l].x+=points[i].x; sum[l].y+=points[i].y; sum[l].n++; }
+    ctx.lineWidth = 2;
+    for (let l=0;l<result.count;l++){
+      if (sum[l].n === 0) continue;
+      ctx.strokeStyle = PALETTE[l % PALETTE.length];
+      ctx.beginPath(); ctx.arc(T.sx(sum[l].x/sum[l].n), T.sy(sum[l].y/sum[l].n), 7, 0, 2*Math.PI); ctx.stroke();
+    }
+  }
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(T.sx(0), T.sy(0), 3.5, 0, 2*Math.PI); ctx.fill();
+  return {ctx, T};
+}
+
+// ---------- threshold-circle geometry overlay (the ABD figure) ------
+function drawThreshold(ctx, T, points, focus, lambdaDeg, sigma){
+  focus = Math.max(1, Math.min(points.length-1, focus));
+  const A = points[focus-1], B = points[focus];
+  const lambda = lambdaDeg * Math.PI/180;
+  const dphi = Math.abs(B.theta - A.theta);
+  const dmax = dmaxOf(A.r, dphi, lambda, sigma);
+  const dist = Math.hypot(B.x-A.x, B.y-A.y);
+  const brk = !(dist <= dmax);
+  const sx = T.sx, sy = T.sy, s = T.scale;
+  ctx.save();
+  ctx.font = '12px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
+
+  // rays O->p_{n-1}, O->p_n
+  ctx.strokeStyle = '#7c8aa5'; ctx.lineWidth = 1.2;
+  for (const P of [A,B]){ ctx.beginPath(); ctx.moveTo(sx(0),sy(0)); ctx.lineTo(sx(P.x),sy(P.y)); ctx.stroke(); }
+
+  // forward extension of the p_{n-1} ray (dashed) — reference direction for λ
+  const uF = { x:Math.cos(A.theta), y:Math.sin(A.theta) };
+  ctx.setLineDash([5,4]); ctx.strokeStyle = '#516084';
+  ctx.beginPath(); ctx.moveTo(sx(A.x),sy(A.y)); ctx.lineTo(sx(A.x+uF.x*1.6), sy(A.y+uF.y*1.6)); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // worst-case incidence line to p_n^h + the λ angle (only when well-defined)
+  let ph = null;
+  if (lambda > dphi){
+    const rh = A.r * Math.sin(lambda) / Math.sin(lambda - dphi);
+    ph = { x: rh*Math.cos(B.theta), y: rh*Math.sin(B.theta) };
+    ctx.strokeStyle = 'rgba(76,194,255,0.9)'; ctx.lineWidth = 1.3;
+    ctx.beginPath(); ctx.moveTo(sx(A.x),sy(A.y)); ctx.lineTo(sx(ph.x),sy(ph.y)); ctx.stroke();
+    const a0 = Math.atan2(-uF.y, uF.x), a1 = Math.atan2(-(ph.y-A.y), ph.x-A.x);
+    ctx.strokeStyle = '#4cc2ff'; ctx.lineWidth = 1.1;
+    ctx.beginPath(); ctx.arc(sx(A.x),sy(A.y),20, Math.min(a0,a1), Math.max(a0,a1)); ctx.stroke();
+    const am = (a0+a1)/2;
+    ctx.fillStyle = '#4cc2ff'; ctx.fillText('λ', sx(A.x)+Math.cos(am)*30-4, sy(A.y)+Math.sin(am)*30+4);
+  }
+
+  // threshold circle around p_{n-1}
+  if (isFinite(dmax) && dmax > 0){
+    ctx.setLineDash([4,4]); ctx.strokeStyle = 'rgba(76,194,255,0.6)'; ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.arc(sx(A.x),sy(A.y), dmax*s, 0, 2*Math.PI); ctx.stroke();
+    ctx.setLineDash([]);
+    const dir = ph ? {x:ph.x-A.x, y:ph.y-A.y} : {x:uF.x, y:uF.y};
+    const dl = Math.hypot(dir.x,dir.y) || 1;
+    ctx.fillStyle = '#8fdcff';
+    ctx.fillText(GL.dth, sx(A.x + dir.x/dl*dmax*0.5)+4, sy(A.y + dir.y/dl*dmax*0.5)-3);
+  }
+
+  // focus rings: p_n green if inside (same cluster), red if breakpoint
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#e6edf3'; ctx.beginPath(); ctx.arc(sx(A.x),sy(A.y),6,0,2*Math.PI); ctx.stroke();
+  ctx.strokeStyle = brk ? '#e6194B' : '#3cb44b'; ctx.beginPath(); ctx.arc(sx(B.x),sy(B.y),6,0,2*Math.PI); ctx.stroke();
+  ctx.fillStyle = '#e6edf3';
+  ctx.fillText(GL.pn1, sx(A.x)+9, sy(A.y)-6);
+  ctx.fillText(GL.pn,  sx(B.x)+9, sy(B.y)-6);
+  ctx.restore();
+  return { A, dphi, dmax, dist, brk };
+}
+
+// ---------- state + wiring ------------------------------------------
+const state = { seed: 12345, placeMode: false, boxes: [
+  { x:4.5, y:3.0, w:1.2, h:0.6, angle:  20*Math.PI/180 },   // default obstacle 1
+  { x:3.0, y:5.0, w:1.1, h:0.6, angle: -25*Math.PI/180 },   // default obstacle 2
+] };
+const $ = (id) => document.getElementById(id);
+let focusInit = false;
+function readGlobals(){
+  return {
+    res: +$('res').value, noise: +$('noise').value,
+    minSize: +$('minsize').value, showWalls: $('showWalls').checked,
+  };
+}
+function updateFocusLabel(){
+  const fo = +$('focus').value;
+  $('focusV').textContent = 'p' + (fo-1) + '→p' + fo;
+}
+function recompute(){
+  const g = readGlobals();
+  const {points, env} = generateScan(g.res, g.noise, state.seed);
+  const opts = {showWalls:g.showWalls, showCentroid:true};
+  const lambda = +$('lambda').value, sigma = +$('sigma').value;
+  const t0 = performance.now();
+  const r = abd(points, lambda, sigma, g.minSize);
+  const ms = performance.now() - t0;
+  const dp = drawPanel($('cv'), points, r, env, opts);
+  $('st').innerHTML = `clusters: <b>${r.count}</b> · noise: <b>${r.noise}</b> · points: <b>${points.length}</b> · <b>${ms.toFixed(2)}</b> ms`;
+
+  // focus slider follows the current point count
+  const fs = $('focus');
+  fs.max = String(Math.max(1, points.length-1));
+  if (!focusInit && points.length > 2){ fs.value = String(Math.round(points.length/2)); focusInit = true; }
+  if (+fs.value > points.length-1) fs.value = String(Math.max(1, points.length-1));
+  updateFocusLabel();
+
+  if ($('showCircle').checked && points.length >= 2){
+    const info = drawThreshold(dp.ctx, dp.T, points, +fs.value, lambda, sigma);
+    const deg = (rad)=> (rad*180/Math.PI);
+    const dmaxTxt = (info.dmax < 0) ? 'break (Δθ ≥ λ)' : info.dmax.toFixed(3)+' m';
+    const verdict = info.brk
+      ? '<b style="color:#e6194B">outside → breakpoint</b>'
+      : '<b style="color:#3cb44b">inside → same cluster</b>';
+    $('stFocus').innerHTML =
+      `focus <b>p${(+fs.value)-1}→p${+fs.value}</b> · r<sub>n-1</sub>=<b>${info.A.r.toFixed(2)}</b> m · ` +
+      `Δθ=<b>${deg(info.dphi).toFixed(2)}°</b> · D<sub>max</sub>=<b>${dmaxTxt}</b> · ` +
+      `dist=<b>${info.dist.toFixed(3)}</b> m · ${verdict}`;
+  } else {
+    $('stFocus').innerHTML = '';
+  }
+}
+
+// live value labels
+const labelMap = { res:'resV', noise:'noiseV', minsize:'minsizeV', lambda:'lambdaV', sigma:'sigmaV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
+const fmtMap = { res:(v)=>(+v).toFixed(1), noise:(v)=>(+v).toFixed(3), sigma:(v)=>(+v).toFixed(3), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
+Object.keys(labelMap).forEach(id => {
+  const el = $(id), lab = $(labelMap[id]);
+  const sync = () => { lab.textContent = fmtMap[id] ? fmtMap[id](el.value) : el.value; };
+  el.addEventListener('input', () => { sync(); recompute(); });
+  sync();
+});
+$('focus').addEventListener('input', () => { updateFocusLabel(); recompute(); });
+$('showCircle').addEventListener('change', recompute);
+$('showWalls').addEventListener('input', recompute);
+$('regen').addEventListener('click', () => { state.seed = (state.seed*1103515245 + 12345) & 0x7fffffff; recompute(); });
+window.addEventListener('resize', recompute);
+
+// ---------- box placement + dragging --------------------------------
+function canvasToWorld(cv, evt){
+  const rect = cv.getBoundingClientRect();
+  const px = evt.clientX - rect.left, py = evt.clientY - rect.top;
+  const T = makeTransform(cv.clientWidth, cv.clientHeight);
+  const offX = T.sx(0), offY = T.sy(0);
+  return { x:(px-offX)/T.scale, y:(offY-py)/T.scale };
+}
+function pointInBox(px, py, b){
+  const ca = Math.cos(-b.angle), sa = Math.sin(-b.angle), dx = px-b.x, dy = py-b.y;
+  const lx = dx*ca - dy*sa, ly = dx*sa + dy*ca;
+  return Math.abs(lx) <= b.w/2 && Math.abs(ly) <= b.h/2;
+}
+function boxAt(p){
+  for (let i = state.boxes.length-1; i >= 0; i--) if (pointInBox(p.x, p.y, state.boxes[i])) return i;
+  return -1;
+}
+const DRAG_THRESH = 4;
+let drag = null;
+const cv = $('cv');
+cv.addEventListener('mousedown', (evt) => {
+  if (evt.button !== 0) return;
+  const p = canvasToWorld(cv, evt), idx = boxAt(p);
+  if (idx >= 0){
+    const b = state.boxes[idx];
+    drag = { idx, offX:b.x-p.x, offY:b.y-p.y, downX:evt.clientX, downY:evt.clientY, moved:false };
+    cv.style.cursor = 'grabbing'; evt.preventDefault();
+  } else if (state.placeMode){
+    drag = { idx:-1, place:p, downX:evt.clientX, downY:evt.clientY, moved:false };
+    evt.preventDefault();
+  }
+});
+cv.addEventListener('mousemove', (evt) => {
+  if (drag) return;
+  const p = canvasToWorld(cv, evt);
+  cv.style.cursor = (boxAt(p) >= 0) ? 'grab' : (state.placeMode ? 'crosshair' : 'default');
+});
+window.addEventListener('mousemove', (evt) => {
+  if (!drag) return;
+  if (Math.abs(evt.clientX-drag.downX) > DRAG_THRESH || Math.abs(evt.clientY-drag.downY) > DRAG_THRESH) drag.moved = true;
+  if (drag.idx >= 0 && drag.moved){
+    const p = canvasToWorld(cv, evt), b = state.boxes[drag.idx];
+    b.x = p.x + drag.offX; b.y = p.y + drag.offY;
+    recompute();
+  }
+});
+window.addEventListener('mouseup', () => {
+  if (!drag) return;
+  const d = drag; drag = null;
+  cv.style.cursor = state.placeMode ? 'crosshair' : 'default';
+  if (d.idx >= 0){
+    if (!d.moved && state.placeMode){ state.boxes.splice(d.idx, 1); recompute(); }
+  } else if (d.place && !d.moved && state.placeMode){
+    state.boxes.push({ x:d.place.x, y:d.place.y, w:+$('boxLen').value, h:+$('boxWid').value, angle:(+$('boxAng').value)*Math.PI/180 });
+    recompute();
+  }
+});
+$('placeMode').addEventListener('change', () => { state.placeMode = $('placeMode').checked; cv.style.cursor = state.placeMode ? 'crosshair' : 'default'; });
+$('clearBoxes').addEventListener('click', () => { state.boxes = []; recompute(); });
+
+recompute();
+</script></body></html>

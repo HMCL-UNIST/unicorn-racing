@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3550;
+    --text:#e6edf3; --muted:#8b98a5; --accent:#4cc2ff;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:13px; line-height:1.4;
+  }
+  header{padding:16px 20px 8px; border-bottom:1px solid var(--line)}
+  header h1{margin:0 0 4px; font-size:18px; font-weight:600}
+  header p{margin:0; color:var(--muted); font-size:12px}
+  header a{color:var(--accent); text-decoration:none}
+  header a:hover{text-decoration:underline}
+  .wrap{padding:16px 20px 40px; max-width:1200px; margin:0 auto}
+  .globals{
+    display:flex; flex-wrap:wrap; gap:14px 22px; align-items:center;
+    background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:12px 16px; margin-bottom:16px;
+  }
+  .ctrl{display:flex; flex-direction:column; gap:3px; min-width:120px}
+  .ctrl label{font-size:11px; color:var(--muted); display:flex; justify-content:space-between; gap:8px}
+  .ctrl label b{color:var(--accent); font-weight:600; font-variant-numeric:tabular-nums}
+  input[type=range]{width:100%; accent-color:var(--accent)}
+  select,button{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line);
+    border-radius:7px; padding:6px 10px; font-size:12px; cursor:pointer;
+  }
+  button:hover,select:hover{border-color:var(--accent)}
+  .chk{flex-direction:row; align-items:center; gap:6px; min-width:auto}
+  .chk input{accent-color:var(--accent)}
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px;
+  }
+  canvas{width:100%; background:#0a0d12; border-radius:8px; display:block}
+  .stats{margin-top:8px; font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; min-height:16px}
+  .stats b{color:var(--text)}
+  .pctrls{display:flex; flex-wrap:wrap; gap:10px 20px; margin-top:12px; padding-top:12px; border-top:1px solid var(--line)}
+  .pctrls .ctrl{min-width:160px; flex:0 1 260px}
+  .legend{
+    margin-top:16px; color:var(--muted); font-size:11px; display:flex; flex-wrap:wrap;
+    gap:6px 18px; align-items:center;
+  }
+  .legend .sw{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle}
+  code{background:var(--panel2); padding:1px 5px; border-radius:4px; font-size:11px}
+</style></head>
+<body><header>
+  <h1>Breakpoint Detector — Fixed Threshold</h1>
+  <p>Split at a breakpoint whenever the distance between two adjacent points exceeds a fixed threshold <code>D_max</code> · O(n) · first-quadrant 90° FoV · 1° step scan.
+     &nbsp;<a href="adaptive-demo.html">→ Adaptive Breakpoint version</a></p>
+</header>
+
+<div class="wrap">
+  <div class="globals">
+    <div class="ctrl">
+      <label for="res">Angular res (deg) <b id="resV">1.0</b></label>
+      <input type="range" id="res" min="0.5" max="3" step="0.5" value="1">
+    </div>
+    <div class="ctrl">
+      <label for="noise">Noise σ (m) <b id="noiseV">0.010</b></label>
+      <input type="range" id="noise" min="0" max="0.05" step="0.002" value="0.01">
+    </div>
+    <div class="ctrl">
+      <label for="minsize">Min cluster size <b id="minsizeV">3</b></label>
+      <input type="range" id="minsize" min="1" max="12" step="1" value="3">
+    </div>
+    <div class="ctrl chk"><input type="checkbox" id="showWalls" checked><label for="showWalls" style="color:var(--text)">Show walls</label></div>
+    <button id="regen">🎲 Regenerate</button>
+  </div>
+
+  <div class="globals">
+    <div class="ctrl chk"><input type="checkbox" id="placeMode"><label for="placeMode" style="color:var(--text)">➕ Place boxes</label></div>
+    <div class="ctrl">
+      <label for="boxLen">Box length (m) <b id="boxLenV">1.20</b></label>
+      <input type="range" id="boxLen" min="0.1" max="3.0" step="0.05" value="1.2">
+    </div>
+    <div class="ctrl">
+      <label for="boxWid">Box width (m) <b id="boxWidV">0.60</b></label>
+      <input type="range" id="boxWid" min="0.1" max="2.0" step="0.05" value="0.6">
+    </div>
+    <div class="ctrl">
+      <label for="boxAng">Box angle (deg) <b id="boxAngV">0</b></label>
+      <input type="range" id="boxAng" min="0" max="180" step="5" value="0">
+    </div>
+    <button id="clearBoxes">🗑 Clear boxes</button>
+    <span style="color:var(--muted); font-size:11px; align-self:center">
+      turn on <b style="color:var(--accent)">Place boxes</b>, then click empty space = add · click a box = remove · <b style="color:var(--accent)">drag = move</b>
+    </span>
+  </div>
+
+  <div class="panel">
+    <canvas id="cv"></canvas>
+    <div class="stats" id="st"></div>
+    <div class="pctrls">
+      <div class="ctrl"><label>Distance threshold <code>D_max</code> (m) <b id="thrV">0.30</b></label>
+        <input type="range" id="thr" min="0.05" max="1.0" step="0.01" value="0.30"></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="sw" style="background:#e6194B"></span>Color = cluster</span>
+    <span><span class="sw" style="background:#555"></span>Gray = noise (below min size)</span>
+    <span><span class="sw" style="background:#2a3550"></span>Walls / obstacles (ground truth)</span>
+    <span>White dot = LiDAR origin · first-quadrant 90° FoV · 1° step</span>
+    <span>At far corners/walls, when point spacing exceeds <code>D_max</code>, <b>even a single wall splits into several pieces</b> (over-segmentation)</span>
+  </div>
+</div>
+
+
+<script>
+"use strict";
+// ---------- seeded RNG ----------------------------------------------
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function gauss(rng, mean, std){
+  let u = 0, v = 0;
+  while (u === 0) u = rng();
+  while (v === 0) v = rng();
+  return mean + std * Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v);
+}
+
+// ---------- environment ---------------------------------------------
+function rectSegments(cx, cy, w, h){
+  const hw = w/2, hh = h/2;
+  const c = [[cx-hw,cy-hh],[cx+hw,cy-hh],[cx+hw,cy+hh],[cx-hw,cy+hh]];
+  const s = [];
+  for (let i=0;i<4;i++){ const a=c[i], b=c[(i+1)%4]; s.push({x1:a[0],y1:a[1],x2:b[0],y2:b[1]}); }
+  return s;
+}
+function rectSegmentsRot(cx, cy, w, h, angle){
+  const hw = w/2, hh = h/2, ca = Math.cos(angle), sa = Math.sin(angle);
+  const c = [[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].map(([x,y]) => [cx + x*ca - y*sa, cy + x*sa + y*ca]);
+  const s = [];
+  for (let i=0;i<4;i++){ const a=c[i], b=c[(i+1)%4]; s.push({x1:a[0],y1:a[1],x2:b[0],y2:b[1]}); }
+  return s;
+}
+function buildEnvironment(){
+  // First-quadrant room: sensor sits at the corner (origin); two far walls give the background.
+  // Every obstacle (incl. the two defaults) lives in state.boxes, so all are drag/remove-able.
+  const W = 9;
+  const segments = [
+    {x1:W, y1:0, x2:W, y2:W},    // right wall (x = W)
+    {x1:0, y1:W, x2:W, y2:W},    // top wall   (y = W)
+  ];
+  const circles = [];
+  for (const bx of state.boxes) segments.push(...rectSegmentsRot(bx.x, bx.y, bx.w, bx.h, bx.angle));
+  return {segments, circles};
+}
+
+// ---------- ray casting ---------------------------------------------
+function crossZ(px, py, qx, qy){ return px*qy - py*qx; }
+function raySegment(dx, dy, s){
+  const ax = s.x1, ay = s.y1, ex = s.x2-s.x1, ey = s.y2-s.y1;
+  const denom = crossZ(dx, dy, ex, ey);
+  if (Math.abs(denom) < 1e-12) return Infinity;
+  const t = crossZ(ax, ay, ex, ey) / denom;
+  const u = crossZ(ax, ay, dx, dy) / denom;
+  return (t >= 0 && u >= 0 && u <= 1) ? t : Infinity;
+}
+function rayCircle(dx, dy, c){
+  const b = dx*c.cx + dy*c.cy, cc = c.cx*c.cx + c.cy*c.cy - c.r*c.r, disc = b*b - cc;
+  if (disc < 0) return Infinity;
+  const sq = Math.sqrt(disc), t1 = b - sq, t2 = b + sq;
+  if (t1 >= 0) return t1;
+  if (t2 >= 0) return t2;
+  return Infinity;
+}
+function generateScan(resDeg, noiseSigma, seed){
+  const env = buildEnvironment();
+  const rng = mulberry32(seed);
+  const maxRange = 30, step = resDeg*Math.PI/180;
+  const nBeams = Math.round((Math.PI/2)/step) + 1;   // 0° … 90° (first quadrant)
+  const points = [];
+  for (let i=0;i<nBeams;i++){
+    const theta = i*step, dx = Math.cos(theta), dy = Math.sin(theta);
+    let t = maxRange;
+    for (const s of env.segments) t = Math.min(t, raySegment(dx, dy, s));
+    for (const c of env.circles)  t = Math.min(t, rayCircle(dx, dy, c));
+    if (t >= maxRange*0.999) continue;
+    const r = t + gauss(rng, 0, noiseSigma);
+    if (r <= 0) continue;
+    points.push({ x:r*dx, y:r*dy, r, theta });
+  }
+  return {points, env};
+}
+
+// ---------- clustering: Breakpoint Detector (fixed threshold) -------
+function finalize(labels){
+  const map = new Map(); let next = 0, noise = 0;
+  const out = new Array(labels.length);
+  for (let i=0;i<labels.length;i++){
+    const l = labels[i];
+    if (l < 0){ out[i] = -1; noise++; continue; }
+    if (!map.has(l)) map.set(l, next++);
+    out[i] = map.get(l);
+  }
+  return {labels: out, count: next, noise};
+}
+function dropSmall(labels, minSize){
+  const sizes = new Map();
+  for (const l of labels) if (l >= 0) sizes.set(l, (sizes.get(l)||0)+1);
+  for (let i=0;i<labels.length;i++)
+    if (labels[i] >= 0 && sizes.get(labels[i]) < minSize) labels[i] = -1;
+  return finalize(labels);
+}
+function breakpoint(points, thr, minSize){
+  const n = points.length;
+  const labels = new Array(n).fill(-1);
+  if (n === 0) return finalize(labels);
+  let cid = 0; labels[0] = 0;
+  for (let i=1;i<n;i++){
+    const d = Math.hypot(points[i].x-points[i-1].x, points[i].y-points[i-1].y);
+    if (d > thr) cid++;                       // fixed threshold -> new cluster
+    labels[i] = cid;
+  }
+  return dropSmall(labels, minSize);
+}
+
+// ---------- rendering ------------------------------------------------
+const PALETTE = ['#e6194B','#3cb44b','#4363d8','#f58231','#911eb4','#42d4f4',
+                 '#f032e6','#bfef45','#fabed4','#469990','#ffe119','#9A6324',
+                 '#dcbeff','#aaffc3','#ffd8b1','#a9a9a9'];
+const NOISE_COLOR = '#555';
+function setupCanvas(cv){
+  const dpr = window.devicePixelRatio || 1;
+  const cssW = cv.clientWidth || 900, cssH = Math.round(cssW * 0.66);
+  cv.style.height = cssH + 'px';
+  cv.width = Math.round(cssW*dpr); cv.height = Math.round(cssH*dpr);
+  const ctx = cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, cssW, cssH};
+}
+function makeTransform(cssW, cssH){
+  // first quadrant only: sensor (0,0) at bottom-left of a centered square view
+  const pad = 26, xmax = 9.6, ymax = 9.6;
+  const scale = Math.min((cssW-2*pad)/xmax, (cssH-2*pad)/ymax);
+  const offX = (cssW - scale*xmax)/2, offY = (cssH + scale*ymax)/2;
+  return { sx:(x)=>offX + scale*x, sy:(y)=>offY - scale*y, scale };
+}
+function drawPanel(cv, points, result, env, opts){
+  const {ctx, cssW, cssH} = setupCanvas(cv);
+  const T = makeTransform(cssW, cssH);
+  ctx.clearRect(0,0,cssW,cssH);
+  if (opts.showWalls){
+    ctx.strokeStyle = '#2a3550'; ctx.lineWidth = 1.5;
+    for (const s of env.segments){ ctx.beginPath(); ctx.moveTo(T.sx(s.x1),T.sy(s.y1)); ctx.lineTo(T.sx(s.x2),T.sy(s.y2)); ctx.stroke(); }
+    for (const c of env.circles){ ctx.beginPath(); ctx.arc(T.sx(c.cx),T.sy(c.cy),c.r*T.scale,0,2*Math.PI); ctx.stroke(); }
+  }
+  if (state.boxes.length){
+    ctx.strokeStyle = 'rgba(76,194,255,0.7)'; ctx.lineWidth = 1.4;
+    for (const b of state.boxes){
+      const segs = rectSegmentsRot(b.x, b.y, b.w, b.h, b.angle);
+      ctx.beginPath(); ctx.moveTo(T.sx(segs[0].x1), T.sy(segs[0].y1));
+      for (const s of segs) ctx.lineTo(T.sx(s.x2), T.sy(s.y2));
+      ctx.closePath(); ctx.stroke();
+    }
+  }
+  const labels = result.labels;
+  for (let i=0;i<points.length;i++){
+    const l = labels[i];
+    ctx.fillStyle = (l < 0) ? NOISE_COLOR : PALETTE[l % PALETTE.length];
+    ctx.beginPath(); ctx.arc(T.sx(points[i].x), T.sy(points[i].y), (l<0?1.4:2.2), 0, 2*Math.PI); ctx.fill();
+  }
+  if (opts.showCentroid && result.count > 0){
+    const sum = Array.from({length: result.count}, () => ({x:0,y:0,n:0}));
+    for (let i=0;i<points.length;i++){ const l=labels[i]; if(l<0)continue; sum[l].x+=points[i].x; sum[l].y+=points[i].y; sum[l].n++; }
+    ctx.lineWidth = 2;
+    for (let l=0;l<result.count;l++){
+      if (sum[l].n === 0) continue;
+      ctx.strokeStyle = PALETTE[l % PALETTE.length];
+      ctx.beginPath(); ctx.arc(T.sx(sum[l].x/sum[l].n), T.sy(sum[l].y/sum[l].n), 7, 0, 2*Math.PI); ctx.stroke();
+    }
+  }
+  ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(T.sx(0), T.sy(0), 3.5, 0, 2*Math.PI); ctx.fill();
+}
+
+// ---------- state + wiring ------------------------------------------
+const state = { seed: 12345, placeMode: false, boxes: [
+  { x:4.5, y:3.0, w:1.2, h:0.6, angle:  20*Math.PI/180 },   // default obstacle 1
+  { x:3.0, y:5.0, w:1.1, h:0.6, angle: -25*Math.PI/180 },   // default obstacle 2
+] };
+const $ = (id) => document.getElementById(id);
+function readGlobals(){
+  return {
+    res: +$('res').value, noise: +$('noise').value,
+    minSize: +$('minsize').value, showWalls: $('showWalls').checked,
+  };
+}
+function recompute(){
+  const g = readGlobals();
+  const {points, env} = generateScan(g.res, g.noise, state.seed);
+  const opts = {showWalls:g.showWalls, showCentroid:true};
+  const t0 = performance.now();
+  const r = breakpoint(points, +$('thr').value, g.minSize);
+  const ms = performance.now() - t0;
+  drawPanel($('cv'), points, r, env, opts);
+  $('st').innerHTML = `clusters: <b>${r.count}</b> · noise: <b>${r.noise}</b> · points: <b>${points.length}</b> · <b>${ms.toFixed(2)}</b> ms`;
+}
+
+// live value labels
+const labelMap = { res:'resV', noise:'noiseV', minsize:'minsizeV', thr:'thrV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
+const fmtMap = { res:(v)=>(+v).toFixed(1), noise:(v)=>(+v).toFixed(3), thr:(v)=>(+v).toFixed(2), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
+Object.keys(labelMap).forEach(id => {
+  const el = $(id), lab = $(labelMap[id]);
+  const sync = () => { lab.textContent = fmtMap[id] ? fmtMap[id](el.value) : el.value; };
+  el.addEventListener('input', () => { sync(); recompute(); });
+  sync();
+});
+$('showWalls').addEventListener('input', recompute);
+$('regen').addEventListener('click', () => { state.seed = (state.seed*1103515245 + 12345) & 0x7fffffff; recompute(); });
+window.addEventListener('resize', recompute);
+
+// ---------- box placement + dragging --------------------------------
+function canvasToWorld(cv, evt){
+  const rect = cv.getBoundingClientRect();
+  const px = evt.clientX - rect.left, py = evt.clientY - rect.top;
+  const T = makeTransform(cv.clientWidth, cv.clientHeight);
+  const offX = T.sx(0), offY = T.sy(0);
+  return { x:(px-offX)/T.scale, y:(offY-py)/T.scale };
+}
+function pointInBox(px, py, b){
+  const ca = Math.cos(-b.angle), sa = Math.sin(-b.angle), dx = px-b.x, dy = py-b.y;
+  const lx = dx*ca - dy*sa, ly = dx*sa + dy*ca;
+  return Math.abs(lx) <= b.w/2 && Math.abs(ly) <= b.h/2;
+}
+function boxAt(p){
+  for (let i = state.boxes.length-1; i >= 0; i--) if (pointInBox(p.x, p.y, state.boxes[i])) return i;
+  return -1;
+}
+const DRAG_THRESH = 4;
+let drag = null;
+const cv = $('cv');
+cv.addEventListener('mousedown', (evt) => {
+  if (evt.button !== 0) return;
+  const p = canvasToWorld(cv, evt), idx = boxAt(p);
+  if (idx >= 0){
+    const b = state.boxes[idx];
+    drag = { idx, offX:b.x-p.x, offY:b.y-p.y, downX:evt.clientX, downY:evt.clientY, moved:false };
+    cv.style.cursor = 'grabbing'; evt.preventDefault();
+  } else if (state.placeMode){
+    drag = { idx:-1, place:p, downX:evt.clientX, downY:evt.clientY, moved:false };
+    evt.preventDefault();
+  }
+});
+cv.addEventListener('mousemove', (evt) => {              // hover cursor when idle
+  if (drag) return;
+  const p = canvasToWorld(cv, evt);
+  cv.style.cursor = (boxAt(p) >= 0) ? 'grab' : (state.placeMode ? 'crosshair' : 'default');
+});
+window.addEventListener('mousemove', (evt) => {
+  if (!drag) return;
+  if (Math.abs(evt.clientX-drag.downX) > DRAG_THRESH || Math.abs(evt.clientY-drag.downY) > DRAG_THRESH) drag.moved = true;
+  if (drag.idx >= 0 && drag.moved){
+    const p = canvasToWorld(cv, evt), b = state.boxes[drag.idx];
+    b.x = p.x + drag.offX; b.y = p.y + drag.offY;
+    recompute();
+  }
+});
+window.addEventListener('mouseup', () => {
+  if (!drag) return;
+  const d = drag; drag = null;
+  cv.style.cursor = state.placeMode ? 'crosshair' : 'default';
+  if (d.idx >= 0){
+    if (!d.moved && state.placeMode){ state.boxes.splice(d.idx, 1); recompute(); }   // click box -> remove
+  } else if (d.place && !d.moved && state.placeMode){
+    state.boxes.push({ x:d.place.x, y:d.place.y, w:+$('boxLen').value, h:+$('boxWid').value, angle:(+$('boxAng').value)*Math.PI/180 });
+    recompute();
+  }
+});
+$('placeMode').addEventListener('change', () => { state.placeMode = $('placeMode').checked; cv.style.cursor = state.placeMode ? 'crosshair' : 'default'; });
+$('clearBoxes').addEventListener('click', () => { state.boxes = []; recompute(); });
+
+recompute();
+</script></body></html>
