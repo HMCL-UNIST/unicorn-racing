@@ -42,7 +42,7 @@ The key insight is this.
 
 > **A rotating LiDAR's data is already sorted by angle.**
 
-Because the laser rotates in one direction and measures distances sequentially, the points naturally arrive lined up in order of increasing scan angle $\varphi$. We get this **ordering for free**.
+Because the laser rotates in one direction and measures distances sequentially, the points naturally arrive lined up in order of increasing scan angle $\phi$. We get this **ordering for free**.
 
 Points reflected from a single object are also gathered in a **contiguous angular interval**. So instead of searching all points, we only need to check the **distance between the previous point and the current point**. The moment that distance exceeds a threshold is the boundary between objects — a **breakpoint**.
 
@@ -73,16 +73,16 @@ Below is a demo where you can play with the fixed-threshold Breakpoint Detector 
 The fix is simple: **grow $D_{max}$ proportionally to range $r$**.
 
 $$
-D_{max} = r_{i-1}\cdot\frac{\sin(\Delta\varphi)}{\sin(\lambda - \Delta\varphi)} + 3\sigma
+D_{max} = r_{i-1}\cdot\frac{\sin(\Delta\phi)}{\sin(\lambda - \Delta\phi)} + 3\sigma
 $$
 
-- $\Delta\varphi$ : scan angular interval (angular resolution)
+- $\Delta\phi$ : scan angular interval (angular resolution)
 
 - $\lambda$ : the **worst-case incidence angle** of a detectable surface — a parameter setting how permissive the threshold is
 
 - $3\sigma$ : sensor-noise margin
 
-The formula looks complex, but $\Delta\varphi$ is a constant (the sensor resolution) and $\lambda$ is a tuning parameter, so if we treat $\frac{\sin(\Delta\varphi)}{\sin(\lambda - \Delta\varphi)}$ and $3\sigma$ as tunable values, we can rewrite it as:
+The formula looks complex, but $\Delta\phi$ is a constant (the sensor resolution) and $\lambda$ is a tuning parameter, so if we treat $\frac{\sin(\Delta\phi)}{\sin(\lambda - \Delta\phi)}$ and $3\sigma$ as tunable values, we can rewrite it as:
 
 $$
 D_{max} = a\cdot r_{i-1} + b
