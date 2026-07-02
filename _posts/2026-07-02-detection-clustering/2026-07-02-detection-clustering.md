@@ -132,6 +132,10 @@ for 각 점 p (각도 순, 트랙 위 점만):
 
 Stage 2는 사실상 **클러스터 끝점들에 대한 고정 반경 single-linkage 한 스텝**입니다. 코너·occlusion으로 잠깐 끊긴 조각을 다시 꿰매, **한 대 = 한 클러스터**를 지켜줍니다.
 
+아래 데모에서 두 박스가 붙어 있을 때 생기는 over-segmentation과, Dual-Stage 재병합이 끊긴 조각을 어떻게 하나로 다시 잇는지 직접 확인해보세요.
+
+<iframe src="{{ site.baseurl }}/assets/img/posts/detection-clustering/dual-stage-demo.html" title="Dual-Stage clustering interactive demo" loading="lazy" style="width:100%;height:1080px;border:1px solid #2a3550;border-radius:8px;"></iframe>
+
 ## 마무리
 
 2D LiDAR pointset을, 회전형 LiDAR가 공짜로 주는 **각도 정렬**을 이용해 $O(n)$으로 클러스터링하는 흐름을 다뤘습니다. 고정 임계값 **Breakpoint Detector** → 거리 적응형 **ABD** → 끊긴 조각을 다시 꿰매는 **Dual-Stage**로 발전하며, over-segmentation을 줄여 "한 대 = 한 클러스터"를 지킵니다.

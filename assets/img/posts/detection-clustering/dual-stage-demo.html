@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual-Stage Clustering — challenge scenario</title>
+<style>
+  :root{
+    --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3550;
+    --text:#e6edf3; --muted:#8b98a5; --accent:#4cc2ff;
+    --s1:#4cc2ff; --s2:#f58231; --ok:#3cb44b; --bad:#e6194B;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:13px; line-height:1.4;
+  }
+  header{padding:16px 20px 8px; border-bottom:1px solid var(--line)}
+  header h1{margin:0 0 4px; font-size:18px; font-weight:600}
+  header p{margin:0; color:var(--muted); font-size:12px}
+  header code{background:var(--panel2); padding:1px 5px; border-radius:4px; font-size:11px}
+  .wrap{padding:16px 20px 40px; max-width:1000px; margin:0 auto}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px 16px}
+  canvas{width:100%; background:#0a0d12; border-radius:8px; display:block}
+  .banner{
+    display:flex; align-items:center; gap:10px; margin:12px 0 8px; padding:8px 12px;
+    border-radius:8px; border:1px solid var(--line); background:var(--panel2); min-height:40px;
+  }
+  .badge{font-weight:700; font-size:12px; padding:3px 9px; border-radius:6px; white-space:nowrap}
+  .badge.s1{background:rgba(76,194,255,0.16); color:var(--s1); border:1px solid var(--s1)}
+  .badge.s2{background:rgba(245,130,49,0.16); color:var(--s2); border:1px solid var(--s2)}
+  .badge.done{background:rgba(230,25,75,0.16); color:var(--bad); border:1px solid var(--bad)}
+  .banner .msg{font-size:13px; font-variant-numeric:tabular-nums}
+  .banner .msg b{color:var(--text)}
+  .controls{display:flex; align-items:center; gap:10px; margin-top:12px}
+  button{
+    background:var(--panel2); color:var(--text); border:1px solid var(--line);
+    border-radius:7px; padding:6px 12px; font-size:12px; cursor:pointer;
+  }
+  button:hover{border-color:var(--accent)}
+  .progress{flex:1; height:6px; background:var(--panel2); border-radius:4px; overflow:hidden}
+  .progress .bar{height:100%; width:0%; background:var(--accent); transition:width .12s linear}
+  .step{color:var(--muted); font-size:11px; font-variant-numeric:tabular-nums; min-width:78px; text-align:right}
+  .legend{
+    margin-top:16px; color:var(--muted); font-size:11px; display:flex; flex-wrap:wrap;
+    gap:6px 18px; align-items:center;
+  }
+  .legend .sw{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle}
+  .legend .ring{display:inline-block; width:11px; height:11px; border-radius:50%; margin-right:5px; vertical-align:middle; border:1.5px dashed}
+</style>
+</head>
+<body>
+<header>
+  <h1>Dual-Stage Clustering — the two-boxes-merge challenge</h1>
+  <p>A single left-to-right pass over the scan, exactly as <code>detect.cpp → clustering()</code>.
+     <b style="color:var(--s1)">Stage 1</b> = Adaptive Breakpoint (grow the current cluster while the gap stays under <code>D_max = r·sin(Δφ)/sin(λ−Δφ) + 3σ</code>).
+     <b style="color:var(--s2)">Stage 2</b> = on a break, re-attach the point to the nearest existing cluster if it is within a fixed <code>new_cluster_threshold</code> (0.4 m), else start a new one.
+     Challenge: two 45° boxes with one beam threading the gap → Stage 2 re-associates the far box back onto the near one → <b style="color:var(--bad)">two boxes become one cluster</b>.</p>
+</header>
+
+<div class="wrap">
+  <div class="panel">
+    <canvas id="cv"></canvas>
+    <div class="banner">
+      <span class="badge" id="badge">—</span>
+      <span class="msg" id="msg"></span>
+    </div>
+    <div class="controls">
+      <button id="playBtn">⏸ Pause</button>
+      <button id="replayBtn">↻ Replay</button>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="step" id="stepLbl">0 / 0</div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="sw" style="background:#e6194B"></span>Cluster A (near box)</span>
+    <span><span class="sw" style="background:#4363d8"></span>Stray cluster (through-beam)</span>
+    <span><span class="sw" style="background:#6b7681"></span>Noise (dropped: below min size)</span>
+    <span><span class="ring" style="border-color:#4cc2ff"></span>Stage 1 · <code>D_max</code> (adaptive, ~0.24 m here — smaller)</span>
+    <span><span class="ring" style="border-color:#f58231"></span>Stage 2 · fixed 0.4 m re-association net (larger)</span>
+    <span><span class="sw" style="background:rgba(76,194,255,0.55)"></span>Ground-truth boxes (2 objects)</span>
+  </div>
+</div>
+
+<script>
+"use strict";
+// ============================================================================
+// Config — geometry & params verified offline to reproduce the merge with
+// exactly one through-beam (see detect.cpp clustering()).
+// ============================================================================
+const CFG = {
+  res: 2.5, noise: 0.004, seed: 777,
+  lambdaDeg: 44, sigma: 0.01, newThr: 0.4, minSize: 2,
+  R_BG: 8.0, boxAngle: 45*Math.PI/180, Rc: 3.5, halfSep: 5.1, boxSize: 0.6,
+  VIEW: 6.8,
+};
+const COL = { A:'#e6194B', W:'#4363d8', noise:'#6b7681',
+  box:'rgba(76,194,255,0.55)', beamFaint:'rgba(139,152,165,0.16)',
+  beamHot:'#e6edf3', s1:'#4cc2ff', s2:'#f58231', ok:'#3cb44b', bad:'#e6194B' };
+const CLUSTER_COLORS = [COL.A, COL.W, '#3cb44b', '#f58231', '#911eb4'];
+
+// ---------- seeded RNG + geometry (ported from the ABD page) ----------
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+function gauss(rng,m,s){let u=0,v=0;while(u===0)u=rng();while(v===0)v=rng();return m+s*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
+function rectSegmentsRot(cx,cy,w,h,ang){
+  const hw=w/2,hh=h/2,ca=Math.cos(ang),sa=Math.sin(ang);
+  const c=[[-hw,-hh],[hw,-hh],[hw,hh],[-hw,hh]].map(([x,y])=>[cx+x*ca-y*sa,cy+x*sa+y*ca]);
+  const s=[];for(let i=0;i<4;i++){const a=c[i],b=c[(i+1)%4];s.push({x1:a[0],y1:a[1],x2:b[0],y2:b[1]});}
+  return s;
+}
+function crossZ(px,py,qx,qy){return px*qy-py*qx;}
+function raySegment(dx,dy,s){
+  const ax=s.x1,ay=s.y1,ex=s.x2-s.x1,ey=s.y2-s.y1;
+  const denom=crossZ(dx,dy,ex,ey);if(Math.abs(denom)<1e-12)return Infinity;
+  const t=crossZ(ax,ay,ex,ey)/denom,u=crossZ(ax,ay,dx,dy)/denom;
+  return (t>=0&&u>=0&&u<=1)?t:Infinity;
+}
+function makeBoxes(){
+  const a0=CFG.boxAngle-CFG.halfSep*Math.PI/180, a1=CFG.boxAngle+CFG.halfSep*Math.PI/180;
+  return [
+    {x:CFG.Rc*Math.cos(a0), y:CFG.Rc*Math.sin(a0), w:CFG.boxSize, h:CFG.boxSize, angle:CFG.boxAngle},
+    {x:CFG.Rc*Math.cos(a1), y:CFG.Rc*Math.sin(a1), w:CFG.boxSize, h:CFG.boxSize, angle:CFG.boxAngle},
+  ];
+}
+// Scan: ray-cast the two boxes over a background at range R_BG, then keep the
+// on-track region — the box returns plus the through-the-gap stray point.
+function generateScan(boxes){
+  const rng=mulberry32(CFG.seed), step=CFG.res*Math.PI/180;
+  const nBeams=Math.round((Math.PI/2)/step)+1;
+  const segs=[],owner=[];
+  boxes.forEach((b,bi)=>rectSegmentsRot(b.x,b.y,b.w,b.h,b.angle).forEach(s=>{segs.push(s);owner.push(bi);}));
+  const raw=[];
+  for(let i=0;i<nBeams;i++){
+    const th=i*step,dx=Math.cos(th),dy=Math.sin(th);
+    let t=CFG.R_BG,hit=-1;
+    for(let si=0;si<segs.length;si++){const tt=raySegment(dx,dy,segs[si]); if(tt<t){t=tt;hit=owner[si];}}
+    const r=t+gauss(rng,0,CFG.noise);
+    raw.push({theta:th,thetaDeg:th*180/Math.PI,r,hit,x:r*dx,y:r*dy});
+  }
+  const A=raw.filter(p=>p.hit===0), B=raw.filter(p=>p.hit===1);
+  const aMax=Math.max(...A.map(p=>p.thetaDeg)), bMin=Math.min(...B.map(p=>p.thetaDeg));
+  return raw.filter(p=>p.hit>=0 || (p.thetaDeg>aMax && p.thetaDeg<bMin));
+}
+function euclid(a,b){const dx=a.x-b.x,dy=a.y-b.y;return Math.sqrt(dx*dx+dy*dy);}
+
+// ---------- dual-stage clustering, instrumented into per-point steps ----------
+function buildSteps(points){
+  const lambda=CFG.lambdaDeg*Math.PI/180;
+  const div=Math.sin(CFG.res*Math.PI/180)/Math.sin(lambda-CFG.res*Math.PI/180);
+  const clusters=[];            // arrays of point-indices
+  const clusterColor=[];        // color index per cluster (creation order)
+  const steps=[];
+  for(let i=0;i<points.length;i++){
+    const cp=points[i];
+    if(clusters.length===0){
+      clusters.push([i]); clusterColor.push(0);
+      steps.push({i, stage:1, action:'seed', colorIdx:0, linkIdx:-1, s1Ref:-1, s2Ref:-1});
+      continue;
+    }
+    const dmax=cp.r*div+3*CFG.sigma;
+    const back=clusters[clusters.length-1];
+    const backIdx=back[back.length-1];
+    const dist=euclid(cp, points[backIdx]);
+    if(dist<dmax){
+      back.push(i);
+      steps.push({i, stage:1, action:'append', colorIdx:clusterColor[clusters.length-1],
+        linkIdx:backIdx, s1Ref:backIdx, s2Ref:-1, dmax, dist});
+    } else {
+      // Stage 2: nearest existing cluster endpoint
+      let minD=Infinity, minJ=0;
+      for(let j=0;j<clusters.length;j++){
+        const ep=clusters[j][clusters[j].length-1];
+        const d=euclid(cp, points[ep]);
+        if(d<minD){minD=d; minJ=j;}
+      }
+      const nearIdx=clusters[minJ][clusters[minJ].length-1];
+      if(minD<CFG.newThr){
+        const col=clusterColor[minJ];
+        const mv=clusters.splice(minJ,1)[0]; const mc=clusterColor.splice(minJ,1)[0];
+        clusters.push(mv); clusterColor.push(mc); mv.push(i);
+        steps.push({i, stage:2, action:'merge', colorIdx:col, linkIdx:nearIdx,
+          s1Ref:backIdx, s2Ref:nearIdx, dmax, dist, minD});
+      } else {
+        const col=clusters.length % CLUSTER_COLORS.length; // next color
+        clusters.push([i]); clusterColor.push(col);
+        steps.push({i, stage:2, action:'new', colorIdx:col, linkIdx:-1,
+          s1Ref:backIdx, s2Ref:nearIdx, dmax, dist, minD});
+      }
+    }
+  }
+  // survivors after min-size filter
+  const survivors=new Set();
+  clusters.forEach(c=>{ if(c.length>=CFG.minSize) c.forEach(i=>survivors.add(i)); });
+  const nSurv=clusters.filter(c=>c.length>=CFG.minSize).length;
+  return {steps, survivors, nClusters:nSurv, div};
+}
+
+// ============================================================================
+// Rendering
+// ============================================================================
+const cv=document.getElementById('cv');
+const boxes=makeBoxes();
+const points=generateScan(boxes);
+const {steps, survivors, nClusters}=buildSteps(points);
+// per-point resolved color index (final), for redraw of already-processed points
+const pointColorIdx=new Array(points.length).fill(-1);
+const pointLink=new Array(points.length).fill(-1);
+steps.forEach(s=>{ pointColorIdx[s.i]=s.colorIdx; pointLink[s.i]=s.linkIdx; });
+
+function setupCanvas(){
+  const dpr=window.devicePixelRatio||1;
+  const cssW=cv.clientWidth||900, cssH=Math.round(cssW*0.62);
+  cv.style.height=cssH+'px';
+  cv.width=Math.round(cssW*dpr); cv.height=Math.round(cssH*dpr);
+  const ctx=cv.getContext('2d'); ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx,cssW,cssH};
+}
+function makeTransform(cssW,cssH){
+  const pad=30, m=CFG.VIEW;
+  const scale=Math.min((cssW-2*pad)/m,(cssH-2*pad)/m);
+  const offX=(cssW-scale*m)/2, offY=(cssH+scale*m)/2;
+  return {sx:x=>offX+scale*x, sy:y=>offY-scale*y, scale};
+}
+function colorOf(idx, i){
+  // grey out non-survivors (dropped by min-size) once the run is complete
+  return CLUSTER_COLORS[idx % CLUSTER_COLORS.length];
+}
+// dashed threshold circle (radius in metres) with a label placed on the rim
+function drawThresh(ctx,T,c,rM,color,label,thin,labAng){
+  const R=rM*T.scale;
+  ctx.setLineDash([4,4]); ctx.strokeStyle=color; ctx.lineWidth=thin?1.1:1.8;
+  ctx.beginPath(); ctx.arc(T.sx(c.x),T.sy(c.y),R,0,2*Math.PI); ctx.stroke(); ctx.setLineDash([]);
+  ctx.fillStyle=color; ctx.font='11px sans-serif';
+  const a=(labAng==null)?-0.4:labAng;
+  ctx.fillText(label, T.sx(c.x)+Math.cos(a)*R+3, T.sy(c.y)+Math.sin(a)*R-2);
+}
+function convexHull(pts){
+  const p=pts.slice().sort((a,b)=>a.x-b.x||a.y-b.y);
+  if(p.length<3) return p;
+  const cross=(o,a,b)=>(a.x-o.x)*(b.y-o.y)-(a.y-o.y)*(b.x-o.x);
+  const lo=[]; for(const q of p){while(lo.length>=2&&cross(lo[lo.length-2],lo[lo.length-1],q)<=0)lo.pop();lo.push(q);}
+  const up=[]; for(let i=p.length-1;i>=0;i--){const q=p[i];while(up.length>=2&&cross(up[up.length-2],up[up.length-1],q)<=0)up.pop();up.push(q);}
+  lo.pop(); up.pop(); return lo.concat(up);
+}
+
+// draw the whole frame for a given step index `cur` (0..steps.length), with
+// `hi` in [0,1] fading in the current highlight; `finished` for the result view.
+function draw(cur, hi, finished){
+  const {ctx,cssW,cssH}=setupCanvas();
+  const T=makeTransform(cssW,cssH);
+  ctx.clearRect(0,0,cssW,cssH);
+
+  // ground-truth boxes
+  ctx.lineWidth=1.4; ctx.strokeStyle=COL.box;
+  for(const b of boxes){
+    const segs=rectSegmentsRot(b.x,b.y,b.w,b.h,b.angle);
+    ctx.beginPath(); ctx.moveTo(T.sx(segs[0].x1),T.sy(segs[0].y1));
+    for(const s of segs) ctx.lineTo(T.sx(s.x2),T.sy(s.y2));
+    ctx.closePath(); ctx.stroke();
+  }
+
+  // result: shade the merged (surviving) cluster to show "1 object"
+  if(finished){
+    const merged=[];
+    for(let i=0;i<points.length;i++) if(survivors.has(i) && pointColorIdx[i]===0) merged.push(points[i]);
+    if(merged.length>=3){
+      const h=convexHull(merged);
+      ctx.beginPath(); ctx.moveTo(T.sx(h[0].x),T.sy(h[0].y));
+      for(const q of h) ctx.lineTo(T.sx(q.x),T.sy(q.y));
+      ctx.closePath();
+      ctx.fillStyle='rgba(230,25,75,0.12)'; ctx.fill();
+      ctx.strokeStyle='rgba(230,25,75,0.7)'; ctx.setLineDash([5,4]); ctx.lineWidth=1.6; ctx.stroke(); ctx.setLineDash([]);
+    }
+  }
+
+  const revealed = finished ? points.length : cur; // points already placed
+  // faint beams + chain links for revealed points
+  ctx.lineWidth=1;
+  for(let i=0;i<revealed;i++){
+    ctx.strokeStyle=COL.beamFaint;
+    ctx.beginPath(); ctx.moveTo(T.sx(0),T.sy(0)); ctx.lineTo(T.sx(points[i].x),T.sy(points[i].y)); ctx.stroke();
+  }
+  ctx.lineWidth=1.6;
+  for(let i=0;i<revealed;i++){
+    const li=pointLink[i];
+    if(li>=0){
+      const survive = !finished || (survivors.has(i)&&survivors.has(li));
+      ctx.strokeStyle = survive ? colorOf(pointColorIdx[i],i) : COL.noise;
+      ctx.globalAlpha = survive ? 0.85 : 0.4;
+      ctx.beginPath(); ctx.moveTo(T.sx(points[li].x),T.sy(points[li].y)); ctx.lineTo(T.sx(points[i].x),T.sy(points[i].y)); ctx.stroke();
+      ctx.globalAlpha=1;
+    }
+  }
+  // points
+  for(let i=0;i<revealed;i++){
+    let col = colorOf(pointColorIdx[i], i);
+    if(finished && !survivors.has(i)) col=COL.noise;
+    ctx.fillStyle=col;
+    ctx.beginPath(); ctx.arc(T.sx(points[i].x),T.sy(points[i].y), 3.0, 0, 2*Math.PI); ctx.fill();
+  }
+
+  // current-step highlight
+  if(!finished && cur>=1 && cur<=steps.length){
+    const st=steps[cur-1];
+    const cp=points[st.i];
+    ctx.globalAlpha=hi;
+    // hot beam to current point
+    ctx.strokeStyle=COL.beamHot; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(T.sx(0),T.sy(0)); ctx.lineTo(T.sx(cp.x),T.sy(cp.y)); ctx.stroke();
+
+    // threshold circles — the two parameters have DIFFERENT radii:
+    //  Stage 1 = adaptive D_max (small),  Stage 2 = fixed 0.4 m re-association net (large)
+    if(st.stage===1){
+      if(st.s1Ref>=0) drawThresh(ctx,T, points[st.s1Ref], st.dmax, COL.s1, 'D_max (ABD)', false, -Math.PI/2);
+    } else if(st.action==='new'){
+      drawThresh(ctx,T, points[st.s2Ref], CFG.newThr, COL.s2, '0.4 m re-assoc', false, -0.35);
+    } else { // merge: show both circles concentric on the nearest cluster to expose the gap between them
+      drawThresh(ctx,T, points[st.s2Ref], st.dmax, COL.s1, 'D_max (ABD)', true, -Math.PI/2);
+      drawThresh(ctx,T, points[st.s2Ref], CFG.newThr, COL.s2, '0.4 m re-assoc', false, -0.35);
+    }
+    // ring on current point: green if joined a cluster, blue if it starts a new one
+    ctx.lineWidth=2.4;
+    ctx.strokeStyle = (st.action==='new') ? COL.W : COL.ok;
+    ctx.beginPath(); ctx.arc(T.sx(cp.x),T.sy(cp.y), 6.5, 0, 2*Math.PI); ctx.stroke();
+    ctx.globalAlpha=1;
+  }
+
+  // LiDAR origin
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(T.sx(0),T.sy(0),4,0,2*Math.PI); ctx.fill();
+  ctx.fillStyle=COL.noise; ctx.font='11px sans-serif'; ctx.fillText('LiDAR', T.sx(0)+7, T.sy(0)+14);
+}
+
+// ============================================================================
+// Banner text per step
+// ============================================================================
+const badge=document.getElementById('badge'), msg=document.getElementById('msg');
+function setBanner(cur, finished){
+  if(finished){
+    badge.className='badge done'; badge.textContent='RESULT';
+    msg.innerHTML=`Ground truth <b>2 objects</b>, but detection returns <b style="color:${COL.bad}">1 cluster</b> — the two boxes were merged (under-segmentation). The through-beam formed a 1-point cluster → dropped as noise.`;
+    return;
+  }
+  if(cur<1){ badge.className='badge s1'; badge.textContent='START'; msg.textContent='LiDAR sweeps left → right; the dual-stage clustering runs in a single pass.'; return; }
+  const st=steps[cur-1];
+  if(st.stage===1){
+    badge.className='badge s1'; badge.textContent='STAGE 1 · ABD';
+    if(st.action==='seed') msg.innerHTML=`point <b>#${st.i}</b> · seeds the first cluster.`;
+    else msg.innerHTML=`point <b>#${st.i}</b> · gap <b>${st.dist.toFixed(3)} m</b> &lt; D_max <b>${st.dmax.toFixed(3)} m</b> → <b style="color:${COL.ok}">same cluster</b>.`;
+  } else if(st.action==='new'){
+    badge.className='badge s2'; badge.textContent='STAGE 2 · re-assoc';
+    msg.innerHTML=`point <b>#${st.i}</b> (through-beam) · far from every cluster (<b>${st.minD.toFixed(1)} m</b> ≥ 0.4 m) → <b style="color:${COL.W}">new cluster</b> (1 pt → later dropped as noise).`;
+  } else {
+    badge.className='badge s2'; badge.textContent='STAGE 2 · re-assoc';
+    msg.innerHTML=`point <b>#${st.i}</b> · nearest box is <b>${st.minD.toFixed(3)} m</b> — beyond <b style="color:${COL.s1}">D_max ${st.dmax.toFixed(2)} m</b> (ABD alone would keep them split) yet inside the fixed <b style="color:${COL.s2}">0.4 m</b> net → <b style="color:${COL.bad}">RE-ASSOCIATE → two boxes merge!</b>`;
+  }
+}
+
+// ============================================================================
+// Animation loop
+// ============================================================================
+const DUR_NORMAL=650, DUR_KEY=2200, DUR_SEED=900, HOLD_RESULT=3200;
+function durOf(cur){
+  if(cur<1) return DUR_SEED;
+  const st=steps[cur-1];
+  if(st.stage===2) return DUR_KEY;      // dwell on the interesting stage-2 events
+  if(st.action==='seed') return DUR_SEED;
+  return DUR_NORMAL;
+}
+const bar=document.getElementById('bar'), stepLbl=document.getElementById('stepLbl');
+let cur=0;                 // number of points placed (0..steps.length)
+let phase='run';           // 'run' | 'result'
+let tStart=performance.now();
+let paused=false;
+
+function frame(now){
+  if(paused){ tStart = now - lastElapsed; }   // freeze progress while paused
+  const e = now - tStart;
+
+  if(phase==='run'){
+    const dur=durOf(cur);
+    const hi=Math.min(1, e/Math.min(320,dur));
+    draw(cur, cur===0?0:hi, false);
+    setBanner(cur, false);
+    bar.style.width = (100*cur/steps.length).toFixed(1)+'%';
+    stepLbl.textContent = `${cur} / ${steps.length}`;
+    if(!paused && e>=dur){
+      cur++; tStart=now;
+      if(cur>steps.length){ phase='result'; tStart=now; }
+    }
+  } else {
+    draw(steps.length, 1, true);
+    setBanner(steps.length, true);
+    bar.style.width='100%'; stepLbl.textContent=`${steps.length} / ${steps.length}`;
+    if(!paused && e>=HOLD_RESULT){ cur=0; phase='run'; tStart=now; }
+  }
+  lastElapsed = e;
+  requestAnimationFrame(frame);
+}
+let lastElapsed=0;
+
+// controls (playback only — no parameter interactivity)
+const playBtn=document.getElementById('playBtn');
+playBtn.addEventListener('click', ()=>{ paused=!paused; playBtn.textContent = paused ? '▶ Play' : '⏸ Pause'; });
+document.getElementById('replayBtn').addEventListener('click', ()=>{ cur=0; phase='run'; tStart=performance.now(); paused=false; playBtn.textContent='⏸ Pause'; });
+window.addEventListener('resize', ()=>draw(cur, 1, phase==='result'));
+
+requestAnimationFrame(frame);
+</script>
+</body>
+</html>

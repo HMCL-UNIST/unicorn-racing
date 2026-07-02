@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Breakpoint Detector — Fixed Threshold</title>
 <style>
   :root{
     --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3550;
@@ -47,31 +51,15 @@
   }
   .legend .sw{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle}
   code{background:var(--panel2); padding:1px 5px; border-radius:4px; font-size:11px}
-</style></head>
-<body><header>
+</style>
+</head>
+<body>
+<header>
   <h1>Breakpoint Detector — Fixed Threshold</h1>
-  <p>Split at a breakpoint whenever the distance between two adjacent points exceeds a fixed threshold <code>D_max</code> · O(n) · first-quadrant 90° FoV · 1° step scan.
-     &nbsp;<a href="adaptive-demo.html">→ Adaptive Breakpoint version</a></p>
+  <p>Split at a breakpoint whenever the distance between two adjacent points exceeds a fixed threshold <code>D_max</code> · O(n) · first-quadrant 90° FoV · 1° step scan.</p>
 </header>
 
 <div class="wrap">
-  <div class="globals">
-    <div class="ctrl">
-      <label for="res">Angular res (deg) <b id="resV">1.0</b></label>
-      <input type="range" id="res" min="0.5" max="3" step="0.5" value="1">
-    </div>
-    <div class="ctrl">
-      <label for="noise">Noise σ (m) <b id="noiseV">0.010</b></label>
-      <input type="range" id="noise" min="0" max="0.05" step="0.002" value="0.01">
-    </div>
-    <div class="ctrl">
-      <label for="minsize">Min cluster size <b id="minsizeV">3</b></label>
-      <input type="range" id="minsize" min="1" max="12" step="1" value="3">
-    </div>
-    <div class="ctrl chk"><input type="checkbox" id="showWalls" checked><label for="showWalls" style="color:var(--text)">Show walls</label></div>
-    <button id="regen">🎲 Regenerate</button>
-  </div>
-
   <div class="globals">
     <div class="ctrl chk"><input type="checkbox" id="placeMode"><label for="placeMode" style="color:var(--text)">➕ Place boxes</label></div>
     <div class="ctrl">
@@ -95,9 +83,13 @@
   <div class="panel">
     <canvas id="cv"></canvas>
     <div class="stats" id="st"></div>
+    <div class="stats" id="stFocus"></div>
     <div class="pctrls">
       <div class="ctrl"><label>Distance threshold <code>D_max</code> (m) <b id="thrV">0.30</b></label>
         <input type="range" id="thr" min="0.05" max="1.0" step="0.01" value="0.30"></div>
+      <div class="ctrl chk" style="align-self:end"><input type="checkbox" id="showCircle" checked><label for="showCircle" style="color:var(--text)">Show threshold circle</label></div>
+      <div class="ctrl"><label>focus pair (p<sub>n-1</sub>→p<sub>n</sub>) <b id="focusV">–</b></label>
+        <input type="range" id="focus" min="1" max="1" step="1" value="1"></div>
     </div>
   </div>
 
@@ -105,11 +97,11 @@
     <span><span class="sw" style="background:#e6194B"></span>Color = cluster</span>
     <span><span class="sw" style="background:#555"></span>Gray = noise (below min size)</span>
     <span><span class="sw" style="background:#2a3550"></span>Walls / obstacles (ground truth)</span>
-    <span>White dot = LiDAR origin · first-quadrant 90° FoV · 1° step</span>
+    <span><span class="sw" style="background:#4cc2ff"></span>Threshold circle · fixed radius <code>D_max</code> around <b>pₙ₋₁</b></span>
+    <span>White dot = LiDAR origin · first-quadrant 90° FoV · 1° step · point <b style="color:#3cb44b">inside</b> the circle = same cluster · <b style="color:#e6194B">outside</b> = breakpoint</span>
     <span>At far corners/walls, when point spacing exceeds <code>D_max</code>, <b>even a single wall splits into several pieces</b> (over-segmentation)</span>
   </div>
 </div>
-
 
 <script>
 "use strict";
@@ -281,6 +273,38 @@ function drawPanel(cv, points, result, env, opts){
     }
   }
   ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(T.sx(0), T.sy(0), 3.5, 0, 2*Math.PI); ctx.fill();
+  return {ctx, T};
+}
+
+// ---------- threshold-circle overlay (fixed D_max) ------------------
+function drawThreshold(ctx, T, points, focus, thr){
+  focus = Math.max(1, Math.min(points.length-1, focus));
+  const A = points[focus-1], B = points[focus];
+  const dist = Math.hypot(B.x-A.x, B.y-A.y);
+  const brk = dist > thr;
+  const sx = T.sx, sy = T.sy, s = T.scale;
+  ctx.save();
+  ctx.font = '12px sans-serif'; ctx.textBaseline = 'alphabetic'; ctx.lineJoin = 'round';
+
+  // rays O->p_{n-1}, O->p_n
+  ctx.strokeStyle = '#7c8aa5'; ctx.lineWidth = 1.2;
+  for (const P of [A,B]){ ctx.beginPath(); ctx.moveTo(sx(0),sy(0)); ctx.lineTo(sx(P.x),sy(P.y)); ctx.stroke(); }
+
+  // fixed threshold circle around p_{n-1}
+  ctx.setLineDash([4,4]); ctx.strokeStyle = 'rgba(76,194,255,0.6)'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.arc(sx(A.x),sy(A.y), thr*s, 0, 2*Math.PI); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#8fdcff'; ctx.fillText('Dₘₐₓ', sx(A.x)+thr*s*0.5+4, sy(A.y)-3);
+
+  // focus rings: p_n green if inside (same cluster), red if breakpoint
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = '#e6edf3'; ctx.beginPath(); ctx.arc(sx(A.x),sy(A.y),6,0,2*Math.PI); ctx.stroke();
+  ctx.strokeStyle = brk ? '#e6194B' : '#3cb44b'; ctx.beginPath(); ctx.arc(sx(B.x),sy(B.y),6,0,2*Math.PI); ctx.stroke();
+  ctx.fillStyle = '#e6edf3';
+  ctx.fillText('pₙ₋₁', sx(A.x)+9, sy(A.y)-6);
+  ctx.fillText('pₙ',  sx(B.x)+9, sy(B.y)-6);
+  ctx.restore();
+  return { A, B, dist, brk };
 }
 
 // ---------- state + wiring ------------------------------------------
@@ -289,34 +313,56 @@ const state = { seed: 12345, placeMode: false, boxes: [
   { x:3.0, y:5.0, w:1.1, h:0.6, angle: -25*Math.PI/180 },   // default obstacle 2
 ] };
 const $ = (id) => document.getElementById(id);
+let focusInit = false;
 function readGlobals(){
-  return {
-    res: +$('res').value, noise: +$('noise').value,
-    minSize: +$('minsize').value, showWalls: $('showWalls').checked,
-  };
+  return { res: 2.5, noise: 0.03, minSize: 1, showWalls: true };
+}
+function updateFocusLabel(){
+  const fo = +$('focus').value;
+  $('focusV').textContent = 'p' + (fo-1) + '→p' + fo;
 }
 function recompute(){
   const g = readGlobals();
   const {points, env} = generateScan(g.res, g.noise, state.seed);
   const opts = {showWalls:g.showWalls, showCentroid:true};
+  const thr = +$('thr').value;
   const t0 = performance.now();
-  const r = breakpoint(points, +$('thr').value, g.minSize);
+  const r = breakpoint(points, thr, g.minSize);
   const ms = performance.now() - t0;
-  drawPanel($('cv'), points, r, env, opts);
+  const dp = drawPanel($('cv'), points, r, env, opts);
   $('st').innerHTML = `clusters: <b>${r.count}</b> · noise: <b>${r.noise}</b> · points: <b>${points.length}</b> · <b>${ms.toFixed(2)}</b> ms`;
+
+  // focus slider follows the current point count
+  const fs = $('focus');
+  fs.max = String(Math.max(1, points.length-1));
+  if (!focusInit && points.length > 2){ fs.value = String(Math.round(points.length/2)); focusInit = true; }
+  if (+fs.value > points.length-1) fs.value = String(Math.max(1, points.length-1));
+  updateFocusLabel();
+
+  if ($('showCircle').checked && points.length >= 2){
+    const info = drawThreshold(dp.ctx, dp.T, points, +fs.value, thr);
+    const verdict = info.brk
+      ? '<b style="color:#e6194B">outside → breakpoint</b>'
+      : '<b style="color:#3cb44b">inside → same cluster</b>';
+    $('stFocus').innerHTML =
+      `focus <b>p${(+fs.value)-1}→p${+fs.value}</b> · D<sub>max</sub>=<b>${thr.toFixed(2)}</b> m · ` +
+      `dist=<b>${info.dist.toFixed(3)}</b> m · ${verdict}`;
+  } else {
+    $('stFocus').innerHTML = '';
+  }
 }
 
 // live value labels
-const labelMap = { res:'resV', noise:'noiseV', minsize:'minsizeV', thr:'thrV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
-const fmtMap = { res:(v)=>(+v).toFixed(1), noise:(v)=>(+v).toFixed(3), thr:(v)=>(+v).toFixed(2), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
+const labelMap = { thr:'thrV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
+const fmtMap = { thr:(v)=>(+v).toFixed(2), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
 Object.keys(labelMap).forEach(id => {
   const el = $(id), lab = $(labelMap[id]);
   const sync = () => { lab.textContent = fmtMap[id] ? fmtMap[id](el.value) : el.value; };
   el.addEventListener('input', () => { sync(); recompute(); });
   sync();
 });
-$('showWalls').addEventListener('input', recompute);
-$('regen').addEventListener('click', () => { state.seed = (state.seed*1103515245 + 12345) & 0x7fffffff; recompute(); });
+$('focus').addEventListener('input', () => { updateFocusLabel(); recompute(); });
+$('showCircle').addEventListener('change', recompute);
 window.addEventListener('resize', recompute);
 
 // ---------- box placement + dragging --------------------------------
@@ -380,4 +426,6 @@ $('placeMode').addEventListener('change', () => { state.placeMode = $('placeMode
 $('clearBoxes').addEventListener('click', () => { state.boxes = []; recompute(); });
 
 recompute();
-</script></body></html>
+</script>
+</body>
+</html>

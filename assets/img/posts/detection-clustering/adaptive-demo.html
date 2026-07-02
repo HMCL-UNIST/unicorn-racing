@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adaptive Breakpoint Detector (ABD)</title>
 <style>
   :root{
     --bg:#0e1116; --panel:#161b22; --panel2:#1c2430; --line:#2a3550;
@@ -47,31 +51,15 @@
   }
   .legend .sw{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:middle}
   code{background:var(--panel2); padding:1px 5px; border-radius:4px; font-size:11px}
-</style></head>
-<body><header>
+</style>
+</head>
+<body>
+<header>
   <h1>Adaptive Breakpoint Detector (ABD)</h1>
-  <p>Adapt the threshold <code>D_max</code> proportionally to range <code>r</code> to remove over-segmentation of distant objects · O(n) · first-quadrant 90° FoV · 1° step scan.
-     &nbsp;<a href="breakpoint-demo.html">→ Fixed Breakpoint version</a></p>
+  <p>Adapt the threshold <code>D_max</code> proportionally to range <code>r</code> to remove over-segmentation of distant objects · O(n) · first-quadrant 90° FoV · 1° step scan.</p>
 </header>
 
 <div class="wrap">
-  <div class="globals">
-    <div class="ctrl">
-      <label for="res">Angular res (deg) <b id="resV">1.0</b></label>
-      <input type="range" id="res" min="0.5" max="3" step="0.5" value="1">
-    </div>
-    <div class="ctrl">
-      <label for="noise">Noise σ (m) <b id="noiseV">0.010</b></label>
-      <input type="range" id="noise" min="0" max="0.05" step="0.002" value="0.01">
-    </div>
-    <div class="ctrl">
-      <label for="minsize">Min cluster size <b id="minsizeV">3</b></label>
-      <input type="range" id="minsize" min="1" max="12" step="1" value="3">
-    </div>
-    <div class="ctrl chk"><input type="checkbox" id="showWalls" checked><label for="showWalls" style="color:var(--text)">Show walls</label></div>
-    <button id="regen">🎲 Regenerate</button>
-  </div>
-
   <div class="globals">
     <div class="ctrl chk"><input type="checkbox" id="placeMode"><label for="placeMode" style="color:var(--text)">➕ Place boxes</label></div>
     <div class="ctrl">
@@ -98,9 +86,9 @@
     <div class="stats" id="stFocus"></div>
     <div class="pctrls">
       <div class="ctrl"><label>λ (deg) <b id="lambdaV">10</b></label>
-        <input type="range" id="lambda" min="1" max="30" step="1" value="10"></div>
+        <input type="range" id="lambda" min="0" max="89" step="1" value="10"></div>
       <div class="ctrl"><label>σ (m) <b id="sigmaV">0.010</b></label>
-        <input type="range" id="sigma" min="0.001" max="0.05" step="0.001" value="0.01"></div>
+        <input type="range" id="sigma" min="0.001" max="0.5" step="0.001" value="0.01"></div>
       <div class="ctrl chk" style="align-self:end"><input type="checkbox" id="showCircle" checked><label for="showCircle" style="color:var(--text)">Show threshold circle</label></div>
       <div class="ctrl"><label>focus pair (p<sub>n-1</sub>→p<sub>n</sub>) <b id="focusV">–</b></label>
         <input type="range" id="focus" min="1" max="1" step="1" value="1"></div>
@@ -115,7 +103,6 @@
     <span>First-quadrant 90° FoV · 1° step · the point after the focus point <b style="color:#3cb44b">inside</b> the circle = same cluster · <b style="color:#e6194B">outside</b> = breakpoint</span>
   </div>
 </div>
-
 
 <script>
 "use strict";
@@ -366,10 +353,7 @@ const state = { seed: 12345, placeMode: false, boxes: [
 const $ = (id) => document.getElementById(id);
 let focusInit = false;
 function readGlobals(){
-  return {
-    res: +$('res').value, noise: +$('noise').value,
-    minSize: +$('minsize').value, showWalls: $('showWalls').checked,
-  };
+  return { res: 2.5, noise: 0.03, minSize: 1, showWalls: true };
 }
 function updateFocusLabel(){
   const fo = +$('focus').value;
@@ -410,8 +394,8 @@ function recompute(){
 }
 
 // live value labels
-const labelMap = { res:'resV', noise:'noiseV', minsize:'minsizeV', lambda:'lambdaV', sigma:'sigmaV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
-const fmtMap = { res:(v)=>(+v).toFixed(1), noise:(v)=>(+v).toFixed(3), sigma:(v)=>(+v).toFixed(3), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
+const labelMap = { lambda:'lambdaV', sigma:'sigmaV', boxLen:'boxLenV', boxWid:'boxWidV', boxAng:'boxAngV' };
+const fmtMap = { sigma:(v)=>(+v).toFixed(3), boxLen:(v)=>(+v).toFixed(2), boxWid:(v)=>(+v).toFixed(2) };
 Object.keys(labelMap).forEach(id => {
   const el = $(id), lab = $(labelMap[id]);
   const sync = () => { lab.textContent = fmtMap[id] ? fmtMap[id](el.value) : el.value; };
@@ -420,8 +404,6 @@ Object.keys(labelMap).forEach(id => {
 });
 $('focus').addEventListener('input', () => { updateFocusLabel(); recompute(); });
 $('showCircle').addEventListener('change', recompute);
-$('showWalls').addEventListener('input', recompute);
-$('regen').addEventListener('click', () => { state.seed = (state.seed*1103515245 + 12345) & 0x7fffffff; recompute(); });
 window.addEventListener('resize', recompute);
 
 // ---------- box placement + dragging --------------------------------
@@ -485,4 +467,6 @@ $('placeMode').addEventListener('change', () => { state.placeMode = $('placeMode
 $('clearBoxes').addEventListener('click', () => { state.boxes = []; recompute(); });
 
 recompute();
-</script></body></html>
+</script>
+</body>
+</html>

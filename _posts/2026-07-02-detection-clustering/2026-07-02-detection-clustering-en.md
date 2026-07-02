@@ -132,6 +132,10 @@ for each point p (in angular order, on-track points only):
 
 Stage 2 is essentially **one step of fixed-radius single-linkage over the cluster endpoints**. It stitches back together the fragments briefly split by corners or occlusion, preserving **one car = one cluster**.
 
+In the demo below, see the over-segmentation that occurs when two boxes are adjacent, and how the Dual-Stage re-merge stitches the split fragments back into one.
+
+<iframe src="{{ site.baseurl }}/assets/img/posts/detection-clustering/dual-stage-demo.html" title="Dual-Stage clustering interactive demo" loading="lazy" style="width:100%;height:1080px;border:1px solid #2a3550;border-radius:8px;"></iframe>
+
 ## Wrap-up
 
 We covered clustering a 2D LiDAR pointset in $O(n)$ by exploiting the **angular ordering** a rotating LiDAR gives for free. It evolves from the fixed-threshold **Breakpoint Detector** → the range-adaptive **ABD** → the **Dual-Stage** that stitches split fragments back — reducing over-segmentation and preserving "one car = one cluster".
