@@ -150,3 +150,24 @@ For real-world performance, the following also matter:
 - [datmo (kostaskonkk/datmo)](https://github.com/kostaskonkk/datmo)
 - [TU Delft — Detection and tracking of moving objects (thesis)](https://repository.tudelft.nl/file/File_55415b6d-b835-4390-92df-843ebed8d946?preview=1)
 - [Improving obstacle separation with Dual-Stage clustering]({{ site.baseurl }}/posts/adaptive-breakpoint-detector-en/)
+
+<script>
+(function () {
+  function fit(f) {
+    try {
+      var d = f.contentDocument || f.contentWindow.document;
+      var h = Math.ceil(d.documentElement.scrollHeight);
+      if (h > 60) f.style.height = (h + 4) + "px";
+    } catch (e) {}
+  }
+  function fitAll() {
+    document.querySelectorAll('iframe[src*="/assets/img/posts/"]').forEach(function (f) {
+      var run = function () { fit(f); setTimeout(function () { fit(f); }, 400); };
+      if (f.contentDocument && f.contentDocument.readyState === "complete") run();
+      f.addEventListener("load", run);
+    });
+  }
+  if (document.readyState === "complete") fitAll(); else window.addEventListener("load", fitAll);
+  var t; window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(fitAll, 200); });
+})();
+</script>
