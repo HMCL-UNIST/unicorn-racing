@@ -1,0 +1,261 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root {
+    --bg-color: #f8f9fa;
+    --canvas-bg: #ffffff;
+    --border-color: #dee2e6;
+    --text-primary: #212529;
+    --text-secondary: #6c757d;
+    --gt-color: #20c997;
+    --particle-color: rgba(255, 82, 82, 0.7);
+    --particle-line: rgba(255, 82, 82, 0.3);
+    --slip-color: #339af0;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg-color: #212529;
+      --canvas-bg: #2b3035;
+      --border-color: #495057;
+      --text-primary: #f8f9fa;
+      --text-secondary: #adb5bd;
+      --gt-color: #12b886;
+      --particle-color: rgba(255, 107, 107, 0.8);
+      --particle-line: rgba(255, 107, 107, 0.4);
+      --slip-color: #4dabf7;
+    }
+  }
+  .case-container {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-color);
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+  }
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .case-btn {
+    padding: 8px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    background: var(--canvas-bg);
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .case-btn.active {
+    background: var(--slip-color);
+    color: white;
+    border-color: var(--slip-color);
+  }
+  .case-desc {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+    min-height: 40px;
+  }
+  #case-canvas {
+    width: 100%;
+    height: auto;
+    background: var(--canvas-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    display: block;
+  }
+  .legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 12px;
+    font-size: 12px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .particle-icon {
+    width: 12px;
+    height: 12px;
+    position: relative;
+  }
+  .particle-icon::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 2px;
+    width: 4px;
+    height: 4px;
+    background: var(--particle-color);
+    border-radius: 50%;
+  }
+  .particle-icon::after {
+    content: '';
+    position: absolute;
+    top: 7px;
+    left: 4px;
+    width: 8px;
+    height: 1.5px;
+    background: var(--particle-line);
+    transform: rotate(-20deg);
+  }
+</style></head><body>
+
+<div class="case-container">
+  <div class="btn-group">
+    <button class="case-btn active" data-case="under">1) Parameter Underestimation</button>
+    <button class="case-btn" data-case="over">2) Parameter Overestimation</button>
+    <button class="case-btn" data-case="optimal">3) Optimal Tuning (Sweet Spot)</button>
+  </div>
+  
+  <div id="case-desc" class="case-desc">
+    The filter overtrusts the odometry. Particles cluster and move like a single point, and when slip occurs, the actual position (blue dot) completely escapes the particle distribution and diverges.
+  </div>
+
+  <canvas id="case-canvas" width="700" height="300"></canvas>
+
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background: var(--gt-color)"></div> Ideal Odometry</div>
+    <div class="legend-item"><div class="particle-icon"></div> Individual Particle (Pose Hypothesis)</div>
+    <div class="legend-item"><div class="dot" style="background: var(--slip-color)"></div> Actual Vehicle Position (Slip)</div>
+  </div>
+</div>
+
+
+<script>
+(function(){
+  const canvas = document.getElementById('case-canvas');
+  const ctx = canvas.getContext('2d');
+  const btns = document.querySelectorAll('.case-btn');
+  const descEl = document.getElementById('case-desc');
+
+  let currentCase = 'under';
+
+  const descriptions = {
+    'under': 'The filter overtrusts the odometry. Particles cluster and move like a single point, and when slip occurs, the actual position (blue dot) completely escapes the particle distribution and diverges.',
+    'over': 'The filter distrusts the odometry. Particles spread too widely, and upon sensor matching, multiple hypotheses run rampant, causing the position output to bounce around.',
+    'optimal': 'Ideal tuning state. Individual particles spread just enough to barely cover the maximum slip error range, forming a stable cluster around the actual position.'
+  };
+
+  const caseParams = {
+    'under': { trans: 0.01, rot: 0.005 },
+    'over': { trans: 0.35, rot: 0.15 },
+    'optimal': { trans: 0.08, rot: 0.04 }
+  };
+
+  function randn_bm() {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    return Math.sqrt( -2.0 * Math.log( u ) ) * Math.cos( 2.0 * Math.PI * v );
+  }
+
+  const commands = [
+    {d: 120, a: 0},
+    {d: 150, a: Math.PI / 8},
+    {d: 150, a: Math.PI / 10}
+  ];
+
+  function simulate() {
+    const style = getComputedStyle(document.body);
+    const gtColor = style.getPropertyValue('--gt-color').trim() || '#20c997';
+    const particleColor = style.getPropertyValue('--particle-color').trim() || 'rgba(255, 82, 82, 0.8)';
+    const particleLineColor = style.getPropertyValue('--particle-line').trim() || 'rgba(255, 82, 82, 0.4)';
+    const slipColor = style.getPropertyValue('--slip-color').trim() || '#339af0';
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const startX = 50;
+    const startY = 250;
+    
+    let gtX = startX;
+    let gtY = startY;
+    let gtTheta = 0;
+    
+    ctx.beginPath();
+    ctx.moveTo(gtX, gtY);
+    for(let cmd of commands) {
+      gtTheta += cmd.a;
+      gtX += cmd.d * Math.cos(gtTheta);
+      gtY -= cmd.d * Math.sin(gtTheta);
+      ctx.lineTo(gtX, gtY);
+    }
+    ctx.strokeStyle = gtColor;
+    ctx.lineWidth = 2;
+    ctx.setLineDash([5, 5]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    let slipX = startX;
+    let slipY = startY;
+    let slipTheta = 0;
+    for(let cmd of commands) {
+      slipTheta += cmd.a - 0.06; 
+      slipX += (cmd.d * 0.90) * Math.cos(slipTheta);
+      slipY -= (cmd.d * 0.90) * Math.sin(slipTheta);
+    }
+    
+    ctx.beginPath();
+    ctx.arc(slipX, slipY, 7, 0, 2 * Math.PI);
+    ctx.fillStyle = slipColor;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    const params = caseParams[currentCase];
+    // Slightly reduced the number of particles to make them individually visible
+    const numParticles = 400;
+
+    for(let i=0; i<numParticles; i++) {
+      let px = startX;
+      let py = startY;
+      let pTheta = 0;
+
+      for(let cmd of commands) {
+        let noisyA = cmd.a + randn_bm() * params.rot;
+        let noisyD = cmd.d + randn_bm() * (params.trans * cmd.d);
+        
+        pTheta += noisyA;
+        px += noisyD * Math.cos(pTheta);
+        py -= noisyD * Math.sin(pTheta);
+      }
+
+      // Draw particle heading line
+      ctx.beginPath();
+      ctx.moveTo(px, py);
+      ctx.lineTo(px + Math.cos(pTheta) * 6, py - Math.sin(pTheta) * 6);
+      ctx.strokeStyle = particleLineColor;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Draw particle center point (Position)
+      ctx.beginPath();
+      ctx.arc(px, py, 1.5, 0, 2 * Math.PI);
+      ctx.fillStyle = particleColor;
+      ctx.fill();
+    }
+  }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      btns.forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      currentCase = e.target.dataset.case;
+      descEl.textContent = descriptions[currentCase];
+      simulate();
+    });
+  });
+
+  setTimeout(simulate, 100);
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', simulate);
+})();
+</script></body></html>
